@@ -253,6 +253,13 @@ local pending, styling = false, false
 function ns.Refresh()
     pending = false
     if not db then return end
+    -- No re-ranking in combat (9 Nov 2026: wreaths vanished mid-fight with no error, most likely a spell's text or
+    -- cost briefly missing, which dropped it from the ranking). Keep the last good ranking and restyle; re-rank
+    -- when combat ends (PLAYER_REGEN_ENABLED). Before the first ranking there's nothing to keep, so rank anyway.
+    if InCombatLockdown and InCombatLockdown() and next(ns.rank) then
+        db.combatSkips = (db.combatSkips or 0) + 1
+        return ns.Style()
+    end
     local eff, best = {}, { damage = {}, heal = {} }
     local buttons = Buttons()
     local onBars = {}
@@ -270,6 +277,10 @@ function ns.Refresh()
             end
         end
     end
+    local before, after = 0, 0  -- spells that would drop out of the ranking: counted, to confirm the cause above
+    for _ in pairs(ns.rank) do before = before + 1 end
+    for _ in pairs(eff) do after = after + 1 end
+    if after < before then db.rankDrops = (db.rankDrops or 0) + 1 end
     wipe(ns.rank)
     for id, e in pairs(eff) do
         local k = best[e[2]]
@@ -552,7 +563,7 @@ local function OnEvent(event, a1, a2, a3)
         for _, e in ipairs({ "PLAYER_ENTERING_WORLD", "ACTIONBAR_SLOT_CHANGED", "ACTIONBAR_PAGE_CHANGED",
                              "UPDATE_BONUS_ACTIONBAR", "UPDATE_SHAPESHIFT_FORM", "SPELLS_CHANGED",
                              "LEARNED_SPELL_IN_TAB", "SPELL_TEXT_UPDATE", "PLAYER_LEVEL_UP",
-                             "UNIT_POWER_UPDATE", "UNIT_AURA", "UNIT_SPELLCAST_SUCCEEDED" }) do
+                             "UNIT_POWER_UPDATE", "UNIT_AURA", "UNIT_SPELLCAST_SUCCEEDED", "PLAYER_REGEN_ENABLED" }) do
             pcall(f.RegisterEvent, f, e)  -- not every client has every event
         end
         if GameTooltip and GameTooltip.SetAction then hooksecurefunc(GameTooltip, "SetAction", Tip) end
