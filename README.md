@@ -10,6 +10,16 @@ spells and heals against heals. Made for World of Warcraft: Forever.
 
 ![The four seasons, worst to best](docs/seasons.png)
 
+## In game
+
+A real fight: as you cast, the bramble grows on every wreath, and steps back on a poor cast.
+
+![Manabloom in a real fight](docs/ingame_fight.gif)
+
+Hovering a spell (or the minimap leaf): leaves drift down the edges of the screen, red round to white.
+
+![Leaves falling in game](docs/ingame_leaves.gif)
+
 ## What it does
 
 - **The wreath shows the season.** Autumn oak leaves and acorns, winter frost and snowflakes, spring blossom on a
