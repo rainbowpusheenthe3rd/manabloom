@@ -35,8 +35,12 @@ Hovering a spell (or the minimap leaf): leaves drift down the edges of the scree
 - **A bramble that grows with how well you cast.** While you're casting, a small bramble sits at the top and
   bottom of every wreath, in its own colours: a green bud, a white flower, a black blackberry. Each efficient cast
   (the better half of your spells of that kind) climbs a step: bud, two buds, flower and bud, two flowers, berry and
-  flower, two berries. Each poor cast drops a step. A few seconds after you stop, it rests. The flower and fruit
-  are drawn from the bramble's real ones: five broad petals and many stamens, a berry of drupelets.
+  flower, two berries. Each poor cast drops a step. A few seconds after you stop, it rests.
+- **True to the species.** The flower and berry are bramble, *Rubus fruticosus*, drawn from its flower genes in our
+  flower-geometry system: five broad, rounded petals in radial symmetry around an open cup and a ring of many
+  stamens; the fruit an aggregate of glossy drupelets on a domed receptacle, with the sepals folded back behind it.
+  A real bramble flower has 50 to 100 carpels, each able to become a drupelet; the icon shows 13, set on the golden
+  angle, so they still read at the size of an action button.
 - **It's alive, quietly:**
   - below a third of your mana your least efficient wreaths wilt and your best glow softly, a nudge towards the
     efficient spells when it matters; drinking brings them back. (Only where the game lets addons read your mana:
