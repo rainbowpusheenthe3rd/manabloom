@@ -4,11 +4,14 @@
 
 ![Manabloom's animations: the seasons, the bramble ladder, leaves falling on hover](docs/manabloom.gif)
 
-**A seasonal druid wreath round each action button, coloured by mana efficiency.** Red is your least efficient spell
-of its kind, through violet and blue, to moonlight white for your best. Damage spells are ranked against damage
-spells and heals against heals. Made for World of Warcraft: Forever.
+**A seasonal druid wreath round each action button, coloured by mana efficiency.** The lighter the wreath, the more
+damage or healing the spell gives for its mana: your best spell of its kind is palest, your worst darkest. Damage
+spells are ranked against damage spells and heals against heals. Made for World of Warcraft: Forever.
 
-![The four seasons, worst to best](docs/seasons.png)
+Each season has its own wreath and its own colours (below, best spell on the left). Or choose classic colours,
+red through violet and blue to moonlight white, all year round.
+
+![The four seasons' wreaths, best spell to worst](docs/seasons.png)
 
 ## In game
 
