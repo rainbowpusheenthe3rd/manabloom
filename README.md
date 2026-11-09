@@ -36,7 +36,7 @@ Hovering a spell (or the minimap leaf): leaves drift down the edges of the scree
   bottom of every wreath, in its own colours: a green bud, a white flower, a black blackberry. Each efficient cast
   (the better half of your spells of that kind) climbs a step: bud, two buds, flower and bud, two flowers, berry and
   flower, two berries. Each poor cast drops a step. A few seconds after you stop, it rests.
-- **True to the species.** The flower and berry are bramble, *Rubus fruticosus*, drawn from its flower genes in our
+- **True to the species.** The flower and berry are bramble, *Rubus fruticosus*, drawn from its flower genes in a true-to-life
   flower-geometry system: five broad, rounded petals in radial symmetry around an open cup and a ring of many
   stamens; the fruit an aggregate of glossy drupelets on a domed receptacle, with the sepals folded back behind it.
   A real bramble flower has 50 to 100 carpels, each able to become a drupelet; the icon shows 13, set on the golden
