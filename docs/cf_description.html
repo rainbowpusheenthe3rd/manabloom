@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Manabloom: CurseForge description</title>
+<style>body{font:16px/1.55 Segoe UI,system-ui,sans-serif;max-width:820px;margin:24px auto;padding:0 16px;background:#f6f4ef;color:#222}
+#desc{background:#fff;border:1px solid #ddd;border-radius:8px;padding:18px 22px}
+button{font:inherit;padding:8px 16px;margin:8px 0 14px;border-radius:6px;border:1px solid #6a8;background:#e8f3ec;cursor:pointer}
+.note{color:#555;font-size:14px}</style></head><body>
+<p class="note">1. Click the button, 2. Ctrl+C, 3. in CurseForge's Description editor: Ctrl+A, Ctrl+V, then Save.</p>
+<button onclick="var r=document.createRange();r.selectNodeContents(document.getElementById('desc'));var s=getSelection();s.removeAllRanges();s.addRange(r);">Select the description</button>
+<div id="desc"><p><strong>A seasonal druid wreath round each action button, coloured by mana efficiency.</strong> The lighter the wreath, the more damage or healing the spell gives for its mana: your best spell of its kind is palest, your worst darkest. Damage spells are ranked against damage spells and heals against heals. Made for World of Warcraft: Forever.</p>
+<p><strong>See it in game</strong> (a real fight, and the falling leaves): <a href="https://github.com/rainbowpusheenthe3rd/manabloom">github.com/rainbowpusheenthe3rd/manabloom</a></p>
+<h2>What it does</h2>
+<ul>
+<li><strong>Each season has its own wreath and colours.</strong> Spring is a vine with blossom, summer oxeye daisies, autumn oak leaves and acorns, winter frost, following the calendar. Or choose classic colours, red through violet and blue to moonlight white, all year round.</li>
+<li><strong>A bramble that grows with how well you cast.</strong> While you're casting, a small bramble sits at the top and bottom of every wreath: a green bud, a white flower, a black blackberry. Each efficient cast (the better half of your spells of that kind) climbs a step: bud, two buds, flower and bud, two flowers, berry and flower, two berries. Each poor cast drops a step. A few seconds after you stop, it rests.</li>
+<li><strong>True to the species.</strong> The flower and berry are bramble, <em>Rubus fruticosus</em>, drawn from its flower genes in a true-to-life flower-geometry system: five broad, rounded petals around a ring of many stamens; the fruit an aggregate of glossy drupelets with the sepals folded back behind it.</li>
+<li><strong>Hover a spell</strong> for its damage or healing per mana and your best spell of its kind, while a few leaves drift down the edges of the screen.</li>
+<li><strong>Quietly alive:</strong> Innervate turns every wreath to spring blossom while it lasts; Moonkin makes them starlit; in cat and bear form, where nothing costs mana, they step aside; the first time you log in in a new season, the old wreaths shed and the new ones grow in; learn a new rank and it tells you whether it's better per mana, with a small sprout on the old rank's button until you put the new one on your bar.</li>
+</ul>
+<h2>The minimap button</h2>
+<p>Hover for your spells ranked by efficiency. <strong>Left-click:</strong> the next season. <strong>Right-click:</strong> classic or seasonal colours. <strong>Shift-click:</strong> wreaths on or off (the tooltip line and falling leaves stay). Drag to move it round the minimap.</p>
+<h2>Commands</h2>
+<ul>
+<li><strong>/manabloom</strong>: your spells, most efficient first, in their colours</li>
+<li><strong>/manabloom colours season</strong> or <strong>classic</strong></li>
+<li><strong>/manabloom season autumn</strong> (<strong>winter</strong>, <strong>spring</strong>, <strong>summer</strong>, <strong>auto</strong> to follow the calendar)</li>
+<li><strong>/manabloom off</strong> or <strong>on</strong></li>
+</ul>
+<h2>How efficiency is worked out</h2>
+<p>From each spell's own description and its mana cost: a range like "13 to 16 Nature damage" counts as its average, and damage or healing over time is added in. Durations, ranges and percentages are left out. Spells with no damage or healing number (Mark of the Wild, Thorns, forms, resurrections) and spells that cost no mana get no wreath. Talents and gear aren't counted: it reads the base numbers.</p>
+<p>Works on the default action bars. Minimal on purpose, free and open source (MIT). Not affiliated with or endorsed by Blizzard Entertainment.</p></div></body></html>

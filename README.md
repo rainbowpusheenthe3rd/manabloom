@@ -83,3 +83,18 @@ the default action bars. The TOC also lists the retail interface version, but it
 ## Licence
 
 MIT. Not affiliated with or endorsed by Blizzard Entertainment; World of Warcraft names belong to Blizzard.
+
+## Talks to
+
+Announces its bramble on the global `ManabloomEvents` (a list of functions called with `("bramble", step, top)`); Stillwater listens.
+
+## Releasing
+
+```sh
+git tag -a v1.2.0 -m "1.2.0" && git push origin v1.2.0      # builds the zip, makes the GitHub Release
+git tag cf-v1.2.0 v1.2.0 && git push origin cf-v1.2.0        # uploads that same build to CurseForge
+```
+
+The CurseForge upload needs, once per repository: the variable `CURSEFORGE_PROJECT_ID` and the secret
+`CF_API_TOKEN` (Settings → Secrets and variables → Actions). The game versions come from the `.toc`'s
+`## Interface` line (16001 is WoW: Forever).

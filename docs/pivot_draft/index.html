@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manabloom race × class draft</title>
+<style>
+  :root { --bg:#2e2620; --panel:#3a3029; --ink:#f0ece4; --muted:#c8c0b6; --line:#5a4c40; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 "Segoe UI", system-ui, sans-serif; }
+  main { max-width:1400px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:28px; margin:0 0 4px; }
+  h2 { font-size:20px; margin:40px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px; }
+  p { color:var(--muted); max-width:75ch; }
+  img { max-width:100%; height:auto; display:block; border-radius:6px; }
+  .races { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px; }
+  .race { background:var(--panel); border-radius:8px; padding:12px; }
+  .race h3 { margin:0 0 8px; font-size:17px; }
+  .race .pair { display:grid; grid-template-columns:1fr 1fr; gap:8px; align-items:center; }
+  .race .geo { background:#342c26; border-radius:6px; aspect-ratio:1; background-repeat:no-repeat; }
+  .race small { color:var(--muted); display:block; margin-top:6px; }
+  .wide { overflow-x:auto; background:var(--panel); border-radius:8px; padding:12px; }
+  .wide img { max-width:none; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Manabloom: race × class, draft</h1>
+  <p>Each race gets a wreath from its homeland's plants. Each class gets its own three-step ladder, the thing that
+  grows on the wreath as you cast well (the druid's is the shipped bramble: bud, flower, blackberry). Put together,
+  every race and class pairing has its own look. Only the 22 pairings that use mana in classic are shown; Forever's
+  list needs checking before any of this is built.</p>
+
+  <h2>Race wreaths: diffusion concept beside the geometric draft</h2>
+  <p>The left image in each pair is a MOSS diffusion concept, used as reference for plants, colour and mood. The
+  right one is the geometric version that would go in game, drawn in code at button size. Concepts are reference
+  only; nothing generated ships.</p>
+  <div class="races" id="races"></div>
+
+  <h2>Class ladders</h2>
+  <p>Three steps per class, from a poor run of casts to a perfect one. All drawn as flat geometric shapes.</p>
+  <div class="wide"><img src="class_ladders.png" alt="Seven class ladders, three stages each"></div>
+
+  <h2>The pivot</h2>
+  <p>Rows are races, columns are classes. Each cell is a button in the race's wreath, with the class ladder
+  underneath. A dash means that pairing doesn't exist in classic. Each cell uses the class's general ladder;
+  race-specific versions (a Night Elf priest's moonflower in place of a candle, for example) could come later.</p>
+  <div class="wide"><img src="pivot.png" alt="Race by class pivot of wreaths and ladders"></div>
+
+  <h2>Blender: the 3D → 2D route</h2>
+  <p>Flowers modelled in Blender from Albia's flower-geometry rig (<code>flower3d.py</code>), rendered small. These
+  are three-quarter views. For wreath motifs the camera would need to look straight down, and the renders would be
+  flattened to the same flat colours as the geometric set, so the two styles sit together on one bar.</p>
+  <div class="wide"><img src="blender_open_sheet.png" alt="Contact sheet of Blender flower renders"></div>
+</main>
+<script>
+  const races = [
+    ["Human", "Elwynn: wheat and dog rose"], ["Dwarf", "Dun Morogh: pine and heather"],
+    ["Night Elf", "Teldrassil: bramble and moonflower"], ["Gnome", "Gnomeregan: copper, cogs, blue mushrooms"],
+    ["Orc", "Durotar: thorn and cactus flower"], ["Undead", "Tirisfal: deathcap and nightshade"],
+    ["Tauren", "Mulgore: prairie grass, wildflowers, feathers"], ["Troll", "Echo Isles: palm, orchid, shell"]];
+  // race_wreaths.png is a 4 x 2 grid of 330 x 210 cells; each wreath is 150 px at (90, 10) in its cell
+  const box = document.getElementById("races");
+  races.forEach(([name, home], k) => {
+    const x = (k % 4) * 330 + 90 - 3, y = Math.floor(k / 4) * 210 + 10 - 3;
+    const d = document.createElement("div");
+    d.className = "race";
+    d.innerHTML = `<h3>${name}</h3><div class="pair">
+      <img src="concept_${name.replace(" ", "_")}.jpg" alt="${name} diffusion concept">
+      <div class="geo" role="img" aria-label="${name} geometric wreath"></div></div><small>${home}</small>`;
+    const g = d.querySelector(".geo");
+    // show the 156 px square round this race's wreath, scaled to fit the box
+    new ResizeObserver(() => {
+      const s = g.clientWidth / 156;
+      g.style.backgroundImage = "url(race_wreaths.png)";
+      g.style.backgroundSize = `${1320 * s}px ${420 * s}px`;
+      g.style.backgroundPosition = `${-x * s}px ${-y * s}px`;
+    }).observe(g);
+    box.appendChild(d);
+  });
+</script>
+</body>
+</html>

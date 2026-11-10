@@ -195,14 +195,15 @@ function ns.Style()
             w:SetVertexColor(cr, cg, cb)
             w:ClearAllPoints()
             w:SetPoint("CENTER", b, "CENTER", 0, -3 * droop)  -- a wilting wreath sags
-            w:SetAlpha((curled and 0.35 or 1) * (1 - 0.45 * droop))
+            local O = db.opacity or 1   -- /manabloom opacity: the wreaths' own strength, separate from any bar fade
+            w:SetAlpha(O * (curled and 0.35 or 1) * (1 - 0.45 * droop))
             w:Show()
             local shine = curled and 0 or wilt * r.t * 0.5  -- the best glow softly brighter as the mana runs low
             if shine > 0.02 then
                 glow:SetSize(size, size)
                 glow:SetTexture(tex)
                 glow:SetVertexColor(Colour(r.t))
-                glow:SetAlpha(shine)
+                glow:SetAlpha(O * shine)
                 glow:Show()
             else
                 glow:Hide()
@@ -216,6 +217,7 @@ function ns.Style()
                     t:SetSize(m, m)
                     t:SetTexture(DIR .. "motif_" .. name)
                     t:SetVertexColor(1, 1, 1)  -- their own colours, not the efficiency tint
+                    t:SetAlpha(O)
                     t:ClearAllPoints()
                     t:SetPoint("CENTER", b, i == 1 and "TOP" or "BOTTOM", 0, (i == 1 and 1 or -1) * m * 0.15)
                     t:Show()
@@ -236,8 +238,10 @@ function ns.Style()
                 s:SetSize(14, 14)
                 s:SetPoint("TOPRIGHT", b, "TOPRIGHT", 3, 3)
                 s:SetVertexColor(SPROUT[1], SPROUT[2], SPROUT[3])
+                if s.SetIgnoreParentAlpha then s:SetIgnoreParentAlpha(true) end
                 b.manabloomSprout = s
             end
+            b.manabloomSprout:SetAlpha(db.opacity or 1)
             b.manabloomSprout:Show()
         elseif b.manabloomSprout then
             b.manabloomSprout:Hide()
@@ -298,6 +302,10 @@ function ns.Refresh()
             if b.manabloomGlow.SetBlendMode then b.manabloomGlow:SetBlendMode("ADD") end
             b.manabloomN = b:CreateTexture(nil, "OVERLAY", nil, 7)
             b.manabloomS = b:CreateTexture(nil, "OVERLAY", nil, 7)
+            -- the wreath keeps its own opacity when a bar is faded (Stillwater's quiet bars); wilting still fades it
+            for _, t in ipairs({ b.manabloom, b.manabloomGlow, b.manabloomN, b.manabloomS }) do
+                if t.SetIgnoreParentAlpha then t:SetIgnoreParentAlpha(true) end
+            end
         end
     end
     ns.Style()
@@ -454,6 +462,11 @@ end
 -- it may) can't be judged, so it leaves the bramble as it is; castProbe counts how often that happens.
 ns.bramble = nil
 local lastCast = 0
+-- other addons (Stillwater) listen by putting a function in the global ManabloomEvents; each is called with
+-- ("bramble", step, top), step 0 when the bramble has gone. Errors in a listener stay in the listener.
+function ns.Announce()
+    for _, f in ipairs(ManabloomEvents or {}) do pcall(f, "bramble", ns.bramble or 0, #LADDER) end
+end
 function ns.Cast(spellID)
     local probe = db.castProbe or { seen = 0, secret = 0, secretInCombat = 0 }
     db.castProbe = probe
@@ -469,8 +482,9 @@ function ns.Cast(spellID)
     ns.bramble = r.t >= IDEAL and math.min(#LADDER, i + 1) or math.max(0, i - 1)
     lastCast = GetTime()
     ns.Style()
+    ns.Announce()
     C_Timer.After(REST_AFTER, function()
-        if GetTime() - lastCast >= REST_AFTER - 0.05 then ns.bramble = nil; ns.Style() end
+        if GetTime() - lastCast >= REST_AFTER - 0.05 then ns.bramble = nil; ns.Style(); ns.Announce() end
     end)
 end
 
@@ -614,6 +628,9 @@ SlashCmdList.MANABLOOM = function(msg)
         db.colours = arg == "season" and "season" or nil
         Print(db.colours and ("colours follow the season (" .. Season() .. "), worst to best")
             or "colours: red to moonlight white, all year")
+    elseif cmd == "opacity" and tonumber(arg) then
+        db.opacity = math.max(0, math.min(1, tonumber(arg)))
+        Print(("wreath opacity %.2f"):format(db.opacity))
     elseif cmd == "season" then
         local ok = { autumn = true, winter = true, spring = true, summer = true }
         db.season = ok[arg] and arg or nil
@@ -625,7 +642,7 @@ SlashCmdList.MANABLOOM = function(msg)
                 e.kind == "heal" and "healing" or "damage"))
         end
         Print("season " .. Season() .. (db.colours and ", seasonal colours" or "") ..
-            ". /manabloom season autumn|winter|spring|summer|auto, colours season|classic, off|on")
+            ". /manabloom season autumn|winter|spring|summer|auto, colours season|classic, opacity <0-1>, off|on")
     end
     Soon()
 end
