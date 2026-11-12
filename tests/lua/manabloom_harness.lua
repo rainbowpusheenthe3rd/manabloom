@@ -240,8 +240,8 @@ step(8)
 -- the shared bramble: Moonfire (8921) is the best damage, Roots (339) the worst
 local cast = function(id) frame.fn(nil, "UNIT_SPELLCAST_SUCCEEDED", "player", "guid", id) end
 local function shows(i)  -- what button i's motifs show, "north/south", "-" for nothing
-    local n = norths[i].shown and norths[i].tex:match("motif_(%a+)$") or "-"
-    local so = souths[i].shown and souths[i].tex:match("motif_(%a+)$") or "-"
+    local n = norths[i].shown and norths[i].tex:match("motif_([%w_]+)$") or "-"
+    local so = souths[i].shown and souths[i].tex:match("motif_([%w_]+)$") or "-"
     return n .. "/" .. so
 end
 local ladder = { "bud/-", "bud/bud", "flower/bud", "flower/flower", "berry/flower", "berry/berry" }
@@ -286,4 +286,43 @@ InCombatLockdown = function() return false end
 frame.fn(nil, "PLAYER_REGEN_ENABLED"); run()
 check(tex[1].shown and ns.rank[8921], "after combat it re-ranks, wreaths still there")
 InCombatLockdown = nil
+
+-- other classes' spell text (Wowhead's classic tooltips, 12 Nov 2026)
+local function amt(s) return ns.Amount(s) end
+a, k = amt("Draws on the soul of the party member to shield them, absorbing 48 damage.  Lasts 30 sec.  While the shield holds, spellcasting will not be interrupted by damage.  Once shielded, the target cannot be shielded again for 15 sec.")
+check(near(a, 48) and k == "heal", "Power Word: Shield: a shield counts as healing, 48")
+check(amt("Absorbs 120 physical damage, draining mana instead.  Drains 2 mana per damage absorbed.  Lasts 1 min.") == nil,
+    "Mana Shield pays in absorbed mana: no wreath")
+check(amt("Summons a Stoneskin Totem with 5 health at the feet of the caster.  The totem protects party members within 20 yards, reducing melee damage taken by 4.  Lasts 2 min.") == nil,
+    "Stoneskin Totem only reduces damage taken: no wreath")
+a, k = amt("Summons a Searing Totem with 5 health at your feet for 30 sec that repeatedly attacks an enemy within 20 yards for 9 to 11 Fire damage.")
+check(near(a, 10) and k == "damage", "Searing Totem: 10, not counting the totem's own 5 health")
+a, k = amt("Summons a Healing Stream Totem with 5 health at the feet of the caster for 1 min that heals group members within 20 yards for 6 every 2 seconds.")
+check(near(a, 180) and k == "heal", "Healing Stream Totem: 6 every 2 seconds for 1 min is 180")
+a, k = amt("Launches Arcane Missiles at the enemy, causing 26 Arcane damage each second for 3 sec.")
+check(near(a, 78) and k == "damage", "Arcane Missiles: 26 each second for 3 sec is 78")
+a, k = amt("Ignites the area surrounding the caster, causing 87 Fire damage to himself and 87 Fire damage to all nearby enemies every 1 sec.  Lasts 15 sec.")
+check(near(a, 1305) and k == "damage", "Hellfire: 87 a second for 15 sec to enemies, not the caster's own")
+a, k = amt("Transfers 10 health every second from the target to the caster.  Lasts 5 sec.")
+check(near(a, 50) and k == "damage", "Drain Life: 10 a second for 5 sec, as damage")
+a, k = amt("Regenerates all nearby group members for 98 every 2 seconds for 10 sec.  Druid must channel to maintain the spell.")
+check(near(a, 490) and k == "heal", "Tranquility: 98 every 2 seconds for 10 sec is 490 healing")
+check(amt("Converts 30 health into 30 mana.") == nil, "Life Tap: neither damage nor healing")
+a, k = amt("Heals the target of 45 damage over 15 sec.")
+check(near(a, 45) and k == "heal", "Renew: healing, though it says damage")
+
+-- each class's own ladder on the wreaths
+check(ns.Motifs()[1] == "bud", "no class known: the bramble")
+for class, first in pairs({ PRIEST = "priest_1", MAGE = "mage_1", WARLOCK = "warlock_1", SHAMAN = "shaman_1",
+                            PALADIN = "paladin_1", HUNTER = "hunter_1", DRUID = "bud", WARRIOR = "bud" }) do
+    UnitClass = function() return "x", class end
+    check(ns.Motifs()[1] == first, class .. "'s ladder starts at " .. first)
+end
+UnitClass = function() return "Priest", "PRIEST" end
+for _ = 1, 3 do cast(8921) end
+check(shows(1) == "priest_2/priest_1", "a priest's third step: flame north, candle south")
+for _ = 1, 3 do cast(8921) end
+check(shows(1) == "priest_3/priest_3", "and the top: two haloes")
+now = now + 9; run()
+UnitClass = nil
 return ok

@@ -2,7 +2,7 @@
 ## IconTexture: Interface\AddOns\Manabloom\icon
 ## Title: Manabloom
 ## Version: 1.0.0
-## Notes: A seasonal druid wreath round each action button, red to moonlight white by damage or healing per mana, with a bramble that ripens from bud to berry as you cast efficiently. /manabloom
+## Notes: A seasonal wreath round each action button, red to moonlight white by damage or healing per mana, with your class's own ladder that grows as you cast efficiently. /manabloom
 ## SavedVariablesPerCharacter: ManabloomDB
 
 Manabloom.lua

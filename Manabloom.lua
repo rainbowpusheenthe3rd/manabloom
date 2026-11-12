@@ -11,9 +11,10 @@
 -- (Mar-May), summer ivy (Jun-Aug). And it's alive:
 --   * below a third of your mana the least efficient wreaths wilt (droop, fade, go brown) and the best glow;
 --     drinking brings them back as the mana comes back;
---   * a shared bramble: while you cast, efficient casts (the better half of your scale for that kind) climb a
---     six-step ladder shown on every wreath, north then south: bud, two buds, flower and bud, two flowers,
---     berry and flower, two berries; poor casts step it back; after a few quiet seconds it goes;
+--   * a shared ladder: while you cast, efficient casts (the better half of your scale for that kind) climb six
+--     steps shown on every wreath, north then south, through three stages of your class's own thing (a druid's
+--     bramble: bud, flower, berry; a priest's candle, flame, halo); poor casts step it back; after a few quiet
+--     seconds it goes;
 --   * Innervate turns every wreath to spring blossom while it lasts;
 --   * Moonkin form makes them starlit; cat and bear, where nothing costs mana, curl them shut;
 --   * the first time you log in after the season changes, the old wreaths shed and the new ones grow in;
@@ -37,17 +38,31 @@ local RAMPS = {
     summer = { { 0.80, 0.10, 0.12 }, { 0.98, 0.55, 0.12 }, { 0.40, 0.82, 0.30 }, { 1.00, 0.98, 0.82 } },  -- poppy, sun, leaf, sunlit cream
 }
 local SKIP_AFTER = { sec = true, seconds = true, min = true, minutes = true, yd = true, yards = true, ["%"] = true,
-                     sec_ = true, hr = true, hour = true, hours = true, charges = true, targets = true, times = true }
+                     second = true, hr = true, hour = true, hours = true, charges = true, targets = true, times = true }
 local WILT_AT = 1 / 3                        -- mana fraction below which the worst wreaths start to wilt
 local WILTED = { 0.42, 0.36, 0.28 }          -- dry-leaf brown a fully wilted wreath fades towards
 local STARLIT = { 0.86, 0.90, 1.00 }         -- Moonkin's silver
 local MOONKIN, CURLED = 31, { [1] = true, [5] = true, [8] = true }  -- GetShapeshiftFormID: cat, bear, dire bear
 local INNERVATE = "Innervate"
 local SPROUT = { 0.45, 0.95, 0.35 }
--- The bramble's ladder: two motifs per wreath, north and south, in their own natural colours (tools/
--- manabloom_motifs.py), so the stage reads apart from the efficiency colour. Step 0 shows nothing.
-local LADDER = { { "bud" }, { "bud", "bud" }, { "flower", "bud" }, { "flower", "flower" },
-                 { "berry", "flower" }, { "berry", "berry" } }
+-- The ladder: two motifs per wreath, north and south, in their own natural colours, so the stage reads apart
+-- from the efficiency colour. Six steps over three stages; step 0 shows nothing. Each class grows its own thing
+-- (tools/manabloom_class_motifs.py); the druid's is the bramble (tools/manabloom_motifs.py), and any class
+-- without its own ladder gets the bramble too.
+local LADDER = { { 1 }, { 1, 1 }, { 2, 1 }, { 2, 2 }, { 3, 2 }, { 3, 3 } }
+local MOTIFS = {
+    DRUID = { "bud", "flower", "berry" },                         -- bud, flower, blackberry
+    PRIEST = { "priest_1", "priest_2", "priest_3" },              -- candle, flame, halo
+    MAGE = { "mage_1", "mage_2", "mage_3" },                      -- spark, glyph, crystal
+    WARLOCK = { "warlock_1", "warlock_2", "warlock_3" },          -- ember, fel flame, soul shard
+    SHAMAN = { "shaman_1", "shaman_2", "shaman_3" },              -- pebble, wave, storm
+    PALADIN = { "paladin_1", "paladin_2", "paladin_3" },          -- dim, glowing and radiant seal
+    HUNTER = { "hunter_1", "hunter_2", "hunter_3" },              -- flint point, fletched arrow, drawn bow
+}
+function ns.Motifs()
+    local class = UnitClass and select(2, UnitClass("player"))
+    return MOTIFS[class or ""] or MOTIFS.DRUID
+end
 local MOTIF = 0.36                                      -- a motif's size, in button widths
 -- 9 Nov 2026: the top quarter (0.75) sent a normal Wrath-and-Moonfire fight to seed every time (Wrath Rank 2
 -- sits at 0.69 under Rank 1); the better half ripens on good choices and still falls on poor ones.
@@ -57,18 +72,43 @@ local db
 local function Print(msg) print("|cff7fd07fManabloom|r: " .. msg) end
 
 -- what the description says the spell does, and whether that's damage or healing
+-- Other classes' wording, from Wowhead's classic tooltips (12 Nov 2026):
+--   * a shield counts as healing ("absorbing 48 damage", Power Word: Shield); Mana Shield pays in the mana it
+--     absorbs ("draining mana instead"), so its cost isn't its mana cost: no wreath;
+--   * "damage taken" is protection, not damage (Stoneskin Totem): no wreath;
+--   * a totem's own "with 5 health" and Hellfire's damage "to himself" aren't what the spell does;
+--   * "Regenerates ... for 98" heals (Tranquility), unless it's mana; "Transfers 10 health" from the target is
+--     damage (Drain Life);
+--   * a tick "every 2 seconds" or "each second" counts over the whole duration ("for 10 sec", "Lasts 5 sec",
+--     "for 1 min"): Arcane Missiles, Hellfire, Healing Stream Totem, Tranquility, Drain Life, Mend Pet.
+local function Duration(d)
+    for _, pat in ipairs({ "[Ll]asts (%d+%.?%d*) (%a+)", "for (%d+%.?%d*) (%a+)" }) do
+        for n, unit in d:gmatch(pat) do
+            unit = unit:lower()
+            if unit:find("^sec") then return tonumber(n) end
+            if unit:find("^min") then return tonumber(n) * 60 end
+        end
+    end
+end
+
 function ns.Amount(desc)
     if not desc or desc == "" then return end
     local d = desc:gsub("(%d),(%d)", "%1%2")
     if d:find("dead target") or d:find("[Rr]esurrect") then return end  -- Revive, Rebirth: a life, not a heal
+    if d:find("draining mana") or d:find("damage taken") then return end
+    d = d:gsub("with %d+ health", ""):gsub("%d+%.?%d* %a+ damage to himself and ", "")
     local h = d:gsub("[Hh]ealth", "")  -- Bear Form's "health by 560" is not healing
-    local kind = h:find("[Hh]eal") and "heal" or d:find("damage") and "damage"
+    local heal = h:find("[Hh]eal") or d:find("[Aa]bsorb") or (d:find("[Rr]egenerates") and not d:find("mana"))
+    local kind = heal and "heal" or (d:find("damage") or d:find("[Tt]ransfers %d+ health")) and "damage"
     if not kind or d:find("attackers") then return end  -- Thorns hurts only those who hit the target
+    local every = (d:find("every second") or d:find("each second")) and 1 or tonumber(d:match("every (%d+%.?%d*) sec"))
     local total = 0
     d = d:gsub("(%d+%.?%d*) to (%d+%.?%d*)", function(a, b) total = total + (tonumber(a) + tonumber(b)) / 2; return "#" end)
     for n, after in d:gmatch("(%d+%.?%d*)%s*([%%%a]*)") do
         if not SKIP_AFTER[after:lower()] then total = total + tonumber(n) end
     end
+    local lasts = every and Duration(d)
+    if lasts and lasts > every then total = total * lasts / every end
     if total > 0 then return total, kind end
 end
 
@@ -180,6 +220,7 @@ function ns.Style()
     local wilt, form = ns.Wilt(), Form()
     wilt = wilt or 0
     local curled = CURLED[form]
+    local motifs = ns.Motifs()
     for _, b in ipairs(Buttons()) do
         local id = SpellOf(Slot(b))
         local r = ns.rank[id or 0]
@@ -212,10 +253,10 @@ function ns.Style()
             local step = not curled and ns.bramble and LADDER[ns.bramble]
             local m = (b:GetWidth() or 36) * MOTIF
             for i, t in ipairs({ b.manabloomN, b.manabloomS }) do
-                local name = step and step[i]
-                if name then
+                local stage = step and step[i]
+                if stage then
                     t:SetSize(m, m)
-                    t:SetTexture(DIR .. "motif_" .. name)
+                    t:SetTexture(DIR .. "motif_" .. motifs[stage])
                     t:SetVertexColor(1, 1, 1)  -- their own colours, not the efficiency tint
                     t:SetAlpha(O)
                     t:ClearAllPoints()
@@ -457,8 +498,8 @@ function ns.BurstAll()
     for _, e in ipairs(WreathedButtons()) do ns.Burst(e[1], e[2].t) end
 end
 
--- A cast moves the shared bramble: an efficient one (top quarter for its kind) a stage towards berry, any
--- other a stage back towards seed; the first cast from rest starts at bud. A spell the game seals (in combat
+-- A cast moves the shared ladder: an efficient one (the better half for its kind) a step up, any other a step
+-- back; the first cast from rest starts at the first step. A spell the game seals (in combat
 -- it may) can't be judged, so it leaves the bramble as it is; castProbe counts how often that happens.
 ns.bramble = nil
 local lastCast = 0

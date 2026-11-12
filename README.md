@@ -4,7 +4,7 @@
 
 ![Manabloom's animations: the seasons, the bramble ladder, leaves falling on hover](docs/manabloom.gif)
 
-**A seasonal druid wreath round each action button, coloured by mana efficiency.** The lighter the wreath, the more
+**A seasonal wreath round each action button, coloured by mana efficiency, for every class that casts with mana.** The lighter the wreath, the more
 damage or healing the spell gives for its mana: your best spell of its kind is palest, your worst darkest. Damage
 spells are ranked against damage spells and heals against heals. Made for World of Warcraft: Forever.
 
@@ -36,6 +36,22 @@ Hovering a spell (or the minimap leaf): leaves drift down the edges of the scree
   bottom of every wreath, in its own colours: a green bud, a white flower, a black blackberry. Each efficient cast
   (the better half of your spells of that kind) climbs a step: bud, two buds, flower and bud, two flowers, berry and
   flower, two berries. Each poor cast drops a step. A few seconds after you stop, it rests.
+- **Each class grows its own.** The druid's is the bramble; every other mana class has a ladder of its own, three
+  stages climbed the same way, two at a time:
+
+  ![Each class's ladder: druid bramble, priest candle, mage crystal, warlock shard, shaman storm, paladin seal, hunter arrow](docs/class_ladders.png)
+
+  | Class | Stage 1 | Stage 2 | Stage 3 |
+  |---|---|---|---|
+  | Druid | bud | flower | blackberry |
+  | Priest | unlit candle | lit candle | candle in a halo |
+  | Mage | spark | glyph | crystal |
+  | Warlock | ember | fel flame | soul shard |
+  | Shaman | pebble | wave | storm |
+  | Paladin | dim seal | glowing seal | radiant seal |
+  | Hunter | flint point | fletched arrow | arrow on a drawn bow |
+
+  Classes without mana (warriors, rogues) get no wreaths; any other mana class gets the bramble.
 - **True to the species.** The flower and berry are bramble, *Rubus fruticosus*, drawn from its flower genes in a true-to-life
   flower-geometry system: five broad, rounded petals in radial symmetry around an open cup and a ring of many
   stamens; the fruit an aggregate of glossy drupelets on a domed receptacle, with the sepals folded back behind it.
@@ -46,7 +62,7 @@ Hovering a spell (or the minimap leaf): leaves drift down the edges of the scree
     efficient spells when it matters; drinking brings them back. (Only where the game lets addons read your mana:
     on WoW: Forever it hands it over sealed, so there's no wilting there.)
   - Innervate turns every wreath to spring blossom while it lasts;
-  - Moonkin form makes them starlit; cat and bear, where nothing costs mana, curl them shut;
+  - for druids, Moonkin form makes them starlit; cat and bear, where nothing costs mana, curl them shut;
   - the first time you log in in a new season, the old wreaths shed and the new ones grow in;
   - learn a new rank and it says whether it's better per mana, with a small sprout on the old rank's button until
     you put the new one on your bar.
