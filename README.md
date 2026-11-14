@@ -8,6 +8,14 @@
 damage or healing the spell gives for its mana: your best spell of its kind is palest, your worst darkest. Damage
 spells are ranked against damage spells and heals against heals. Made for World of Warcraft: Forever.
 
+**What you're looking at:**
+
+- **The wreath is the information.** Every spell that costs mana and does damage or healing gets a thin wreath
+  round its action button, coloured by how much it gives for its mana.
+- **The bramble grows on the wreath** while you fight: bud, flower, blackberry as you cast well.
+- **The falling leaves are decoration.** They drift down the edges of the screen only while you hover a wreathed
+  spell, a reminder of the colour scale and nothing more.
+
 Each season has its own wreath and its own colours (below, best spell on the left). Or choose classic colours,
 red through violet and blue to moonlight white, all year round. Whichever you choose, the scale runs dark to
 light: your worst spell darkest, your best palest, so it reads the same in every season.
