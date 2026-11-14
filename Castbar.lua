@@ -56,8 +56,15 @@ local function Edge()
     return EDGE[1], EDGE[2], EDGE[3]
 end
 
--- what the spell does, for the petals' colour: Manabloom's own ranking if it knows the spell; a spell it can't
--- read (secret in combat) is judged by the target: at an enemy, damage; otherwise a heal
+local function NameOf(id)
+    if C_Spell and C_Spell.GetSpellName then return C_Spell.GetSpellName(id) end
+    return GetSpellInfo and (GetSpellInfo(id))
+end
+
+-- what the spell does, for the petals' colour: Manabloom's own ranking if it knows the spell, by its ID, else by
+-- its name (14 Nov 2026, in game: Regrowth and Entangling Roots came out gold, as neither, while Wrath was right;
+-- the cast's ID wasn't the one ranked on the bars, a macro or another rank); a spell it can't read (secret in
+-- combat) is judged by the target: at an enemy, damage; otherwise a heal
 local function Kind(id)
     if Secret(id) then
         local probe = ManabloomDB.castbarProbe or { secret = 0 }
@@ -66,7 +73,14 @@ local function Kind(id)
         return (UnitCanAttack and UnitCanAttack("player", "target")) and "damage" or "heal"
     end
     local r = ns.rank and ns.rank[id or 0]
-    return r and r.kind or "other"
+    if r then return r.kind end
+    local name = id and NameOf(id)
+    if name then
+        for rid, rr in pairs(ns.rank or {}) do
+            if NameOf(rid) == name then return rr.kind end
+        end
+    end
+    return "other"
 end
 
 ---------------------------------------------------------------------------------------------- building it
@@ -137,15 +151,14 @@ local function Build()
     bloom.x = Flower(bloom, "OVERLAY")
     bloom.x.petals:SetAllPoints()
     bloom.go = bloom:CreateAnimationGroup()
+    -- grows round its own centre; no rotation (14 Nov 2026, in game: a frame's Scale + Rotation pair drifted the
+    -- bloom down and right, off the end of the bar, as it grew)
     local grow = bloom.go:CreateAnimation("Scale")
     grow:SetScaleFrom(0.45, 0.45)
     grow:SetScaleTo(1.2, 1.2)
+    if grow.SetOrigin then grow:SetOrigin("CENTER", 0, 0) end
     grow:SetDuration(BLOOM_TIME)
     grow:SetSmoothing("OUT")
-    local turn = bloom.go:CreateAnimation("Rotation")
-    turn:SetDegrees(-25)
-    turn:SetDuration(BLOOM_TIME)
-    turn:SetSmoothing("OUT")
     local fade = bloom.go:CreateAnimation("Alpha")
     fade:SetFromAlpha(1)
     fade:SetToAlpha(0)

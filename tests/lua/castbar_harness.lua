@@ -168,6 +168,11 @@ check(fill.v == s and lit[1].v == s and f1.open == 0, "a secret value: the fill 
 bar.value = 0; hostile = false
 bar:HandleCastStart("cast", 6948)
 check(near(f1.petals.rgb[1], 1) and near(f1.petals.rgb[3], 0.55), "a cast that's neither (hearthstone): pale gold")
+-- another ID for a ranked spell (a macro, another rank): found by name
+C_Spell = { GetSpellName = function(id) return ({ [8936] = "Regrowth", [8938] = "Regrowth", [6948] = "Hearthstone" })[id] end }
+bar:HandleCastStart("cast", 8938)
+check(near(f1.petals.rgb[1], 0.96) and near(f1.petals.rgb[3], 1), "Regrowth by another ID: matched by name, white")
+C_Spell = nil
 
 -- Homeland loaded changes nothing: the colour is the race's either way
 loaded.Homeland = true
