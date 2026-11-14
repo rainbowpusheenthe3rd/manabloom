@@ -4,6 +4,8 @@
 
 ![Manabloom's animations: the seasons, the bramble ladder, leaves falling on hover](docs/manabloom.gif)
 
+*The wreath through the seasons, the bramble growing from bud to blackberry, and leaves falling while you hover a spell.*
+
 **A seasonal druid wreath round each action button, coloured by mana efficiency.** The lighter the wreath, the more
 damage or healing the spell gives for its mana: your best spell of its kind is palest, your worst darkest. Damage
 spells are ranked against damage spells and heals against heals. Made for World of Warcraft: Forever.
@@ -16,11 +18,14 @@ spells are ranked against damage spells and heals against heals. Made for World 
 - **The falling leaves are decoration.** They drift down the edges of the screen only while you hover a wreathed
   spell, a reminder of the colour scale and nothing more.
 
-Each season has its own wreath and its own colours (below, best spell on the left). Or choose classic colours,
-red through violet and blue to moonlight white, all year round. Whichever you choose, the scale runs dark to
-light: your worst spell darkest, your best palest, so it reads the same in every season.
+![Manabloom in a real fight](docs/ingame_fight.webp)
 
-![The four seasons' wreaths, best spell to worst](docs/seasons.png)
+*A real fight: each wreath's colour is that spell's efficiency, and as you cast well the bramble grows on every
+wreath, bud to flower to blackberry.*
+
+Each season has its own wreath and its own colours. Or choose classic colours, red through violet and blue to
+moonlight white, all year round. Whichever you choose, the scale runs dark to light: your worst spell darkest,
+your best palest, so it reads the same in every season.
 
 ## The bramble: bud, flower, blackberry
 
@@ -30,10 +35,6 @@ While you're casting, a bramble grows at the top and bottom of every wreath. Eac
 from a green bud to a white flower to a black blackberry; each poor cast drops one.
 
 ## In game
-
-A real fight: as you cast, the bramble grows on every wreath, and steps back on a poor cast.
-
-![Manabloom in a real fight](docs/ingame_fight.webp)
 
 ### The tooltip
 
