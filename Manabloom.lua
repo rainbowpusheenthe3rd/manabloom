@@ -672,6 +672,10 @@ SlashCmdList.MANABLOOM = function(msg)
     elseif cmd == "opacity" and tonumber(arg) then
         db.opacity = math.max(0, math.min(1, tonumber(arg)))
         Print(("wreath opacity %.2f"):format(db.opacity))
+    elseif cmd == "castbar" then
+        if arg == "on" or arg == "off" then db.castbar = arg == "on" else db.castbar = db.castbar == false end
+        if ns.Castbar then ns.Castbar() end
+        Print(db.castbar == false and "cast bar back to Blizzard's" or "cast bar flowering")
     elseif cmd == "season" then
         local ok = { autumn = true, winter = true, spring = true, summer = true }
         db.season = ok[arg] and arg or nil
@@ -683,7 +687,7 @@ SlashCmdList.MANABLOOM = function(msg)
                 e.kind == "heal" and "healing" or "damage"))
         end
         Print("season " .. Season() .. (db.colours and ", seasonal colours" or "") ..
-            ". /manabloom season autumn|winter|spring|summer|auto, colours season|classic, opacity <0-1>, off|on")
+            ". /manabloom season autumn|winter|spring|summer|auto, colours season|classic, opacity <0-1>, castbar on|off, off|on")
     end
     Soon()
 end

@@ -104,6 +104,11 @@ Recorded in Darnassus at night.
   - the first time you log in in a new season, the old wreaths shed and the new ones grow in;
   - learn a new rank and it says whether it's better per mana, with a small sprout on the old rank's button until
     you put the new one on your bar.
+- **A cast bar that flowers.** Your cast bar becomes a stem: a thin 1 px border and a dark green fill, with five of
+  the season's flowers along it (hawthorn blossom in spring, oxeye daisy in summer, saffron crocus in autumn,
+  snowdrop in winter). Each is a bud until the fill reaches it, then opens. A cast that completes ends in one full
+  bloom; an interrupted one wilts brown and its flowers close. Heals flower white, damage violet. With Homeland, the
+  border takes your race's homeland colour.
 
 ![The minimap button](docs/minimap.png)
 
@@ -121,6 +126,7 @@ the minimap.
 | `/manabloom colours season` or `classic` | seasonal or classic colours |
 | `/manabloom season autumn` (`winter`, `spring`, `summer`, `auto`) | choose the season, or follow the calendar |
 | `/manabloom off` or `on` | put the wreaths away, or bring them back (the tooltip line stays) |
+| `/manabloom castbar off` or `on` | Blizzard's own cast bar, or the flowering one |
 
 ## How efficiency is worked out
 
@@ -140,7 +146,7 @@ MIT. Not affiliated with or endorsed by Blizzard Entertainment; World of Warcraf
 
 ## Talks to
 
-Announces its bramble on the global `ManabloomEvents` (a list of functions called with `("bramble", step, top)`); Stillwater listens.
+Announces its bramble on the global `ManabloomEvents` (a list of functions called with `("bramble", step, top)`); Stillwater listens. The cast bar's border uses Homeland's race colours (copied in) when Homeland is loaded.
 
 ## Releasing
 

@@ -11,6 +11,9 @@ All notable changes to Manabloom are recorded here. The format follows
 - Every mana class grows its own ladder on the wreaths, three stages climbed two at a time like the druid's
   bramble: priest candle to halo, mage spark to crystal, warlock ember to soul shard, shaman pebble to storm,
   paladin dim to radiant seal, hunter flint point to drawn bow.
+- A cast bar that flowers: a 1 px border and a dark green fill, five of the season's flowers opening as the fill
+  reaches them, and a full bloom at the end of a completed cast. White for heals, violet for damage; an interrupted
+  cast wilts. With Homeland loaded the border wears your race's homeland colour. `/manabloom castbar on|off`.
 
 ### Fixed
 
