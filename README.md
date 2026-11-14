@@ -20,8 +20,9 @@ A real fight: as you cast, the bramble grows on every wreath, and steps back on 
 ![Manabloom in a real fight](docs/ingame_fight.webp)
 
 Hovering a spell (or the minimap leaf): leaves drift down the edges of the screen, red round to white.
+Here in Darnassus at night.
 
-![Leaves falling in game](docs/ingame_leaves.webp)
+![Leaves falling down the edges of the screen in Darnassus at night](docs/ingame_leaves.gif)
 
 ## What it does
 
