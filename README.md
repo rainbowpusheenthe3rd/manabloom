@@ -115,7 +115,7 @@ Recorded in Darnassus at night.
 ## The minimap button
 
 Hover for your spells ranked by efficiency. **Left-click:** the next season. **Right-click:** classic or seasonal
-colours. **Shift-click:** wreaths on or off (the tooltip line and falling leaves stay). Drag to move it round
+colours. **Shift-click:** wreaths on or off (the tooltip line and falling leaves stay). **Ctrl-click:** the flowering cast bar on or off. Drag to move it round
 the minimap.
 
 ## Commands

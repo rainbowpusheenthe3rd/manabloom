@@ -150,6 +150,10 @@ mmb.scripts.OnClick(mmb, "LeftButton"); run(); check(not ManabloomDB.off and tex
 IsShiftKeyDown = nil
 mmb.scripts.OnClick(mmb, "RightButton"); check(ManabloomDB.colours == "season", "right-click: the season's colours")
 mmb.scripts.OnClick(mmb, "RightButton"); check(ManabloomDB.colours == nil, "and classic again")
+IsControlKeyDown = function() return true end
+mmb.scripts.OnClick(mmb, "LeftButton"); check(ManabloomDB.castbar == false and not ManabloomDB.off, "ctrl-click: Blizzard's cast bar, wreaths untouched")
+mmb.scripts.OnClick(mmb, "LeftButton"); check(ManabloomDB.castbar == true, "and the flowering one back")
+IsControlKeyDown = nil
 
 -- the spell's own tooltip gets the coloured line, in classic and seasonal colours alike
 local function hover(slot)
