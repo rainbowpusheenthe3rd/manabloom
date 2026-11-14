@@ -8,15 +8,18 @@
 -- Flowers by season (tools/manabloom_castbar.py): hawthorn blossom in spring, oxeye daisy in summer, saffron crocus
 -- in autumn, snowdrop in winter; Innervate makes it spring, as it does the wreaths.
 --
--- With Homeland loaded the border takes your race's homeland colour, the same rim as Homeland's coordinates tab, so
--- the cast bar sits with its minimap frame and bar caps.
+-- The border is your race's homeland colour (the same rim as Homeland's coordinates tab, so it sits with Homeland's
+-- frames, but it doesn't need Homeland). It rests faint, and lights up beside the fill as the fill slides along:
+-- the top and bottom edges are lit as far as the fill has gone, the left edge while a cast is under way, the right
+-- edge when it completes. An interrupted cast's border goes back to faint.
 --
 -- How (Forever's CastingBarFrame.lua and .xml, wow-ui-source "forever" branch): PlayerCastingBarFrame, a 208 x 11
 -- StatusBar run by CastingBarMixin, is left to do all its own work. This draws over it: its border, background and
 -- spark are set invisible (alpha 0, restored by /manabloom castbar off), and Manabloom's own frame, a child of the
 -- bar so it shows, hides, moves and fades with it, carries the look. The fill is a StatusBar fed the bar's own
--- min, max and value every frame, so it keeps working when the game hands those over as secret values; the flowers
--- need a number, so with secret values they stay buds. Success and failure come from hooks on the mixin's own
+-- min, max and value every frame, so it keeps working when the game hands those over as secret values; the lit top
+-- and bottom edges are two 1 px StatusBars fed the same, for the same reason. The flowers need a number, so with
+-- secret values they stay buds. Success and failure come from hooks on the mixin's own
 -- handlers: FinishSpell and HandleCastStop (completed), HandleInterruptOrSpellFailed (interrupted or failed).
 -- /manabloom castbar on|off.
 local _, ns = ...
@@ -29,7 +32,8 @@ local BLOOM_TIME, BLOOM_FADE = 0.9, 0.55           -- the end bloom: how long it
 local FILL = { 0.12, 0.36, 0.16 }                  -- dark green
 local WILTED = { 0.42, 0.36, 0.28 }                -- an interrupted cast: the wreaths' dry-leaf brown
 local BACK = { 0.055, 0.063, 0.055, 0.92 }         -- behind the fill
-local EDGE = { 0.82, 0.86, 0.80 }                  -- the 1 px border, without Homeland
+local EDGE = { 0.82, 0.86, 0.80 }                  -- the 1 px border, for a race without a homeland colour
+local FAINT, LIT = 0.22, 0.95                      -- the border at rest, and where the fill has lit it
 local TINT = { heal = { 0.96, 0.97, 1.00 }, damage = { 0.72, 0.50, 0.98 }, other = { 1.00, 0.86, 0.55 } }
 local HIDE = { "Border", "Background", "Spark", "DropShadow" }   -- Blizzard's pieces that ours replace
 -- each race's homeland flower colour (Homeland.lua RACE_COLOUR, from tools/homeland_nouveau.py PALETTE), 0-255
@@ -47,8 +51,7 @@ local function On() return ManabloomDB and ManabloomDB.castbar ~= false end
 local function Season() return ns.Season and ns.Season() or "spring" end
 
 local function Edge()
-    local loaded = C_AddOns and C_AddOns.IsAddOnLoaded and C_AddOns.IsAddOnLoaded("Homeland")
-    local c = loaded and RACE_COLOUR[select(2, UnitRace("player")) or ""]
+    local c = RACE_COLOUR[select(2, UnitRace("player")) or ""]
     if c then return c[1] / 255, c[2] / 255, c[3] / 255 end
     return EDGE[1], EDGE[2], EDGE[3]
 end
@@ -102,6 +105,16 @@ local function Build()
     o.back:SetColorTexture(BACK[1], BACK[2], BACK[3], BACK[4])
     o.edges = { Line(o, { "TOPLEFT" }, { "TOPRIGHT" }, true), Line(o, { "BOTTOMLEFT" }, { "BOTTOMRIGHT" }, true),
                 Line(o, { "TOPLEFT" }, { "BOTTOMLEFT" }), Line(o, { "TOPRIGHT" }, { "BOTTOMRIGHT" }) }
+    o.lit = {}                                       -- the top and bottom edges, lit as far as the fill has gone
+    for i, side in ipairs({ "TOP", "BOTTOM" }) do
+        local s = CreateFrame("StatusBar", nil, o)
+        s:SetPoint(side .. "LEFT", o, side .. "LEFT")
+        s:SetPoint(side .. "RIGHT", o, side .. "RIGHT")
+        if PixelUtil and PixelUtil.SetHeight then PixelUtil.SetHeight(s, 1, 1) else s:SetHeight(1) end
+        s:SetStatusBarTexture("Interface\\Buttons\\WHITE8x8")
+        s:SetFrameLevel(o:GetFrameLevel() + 1)
+        o.lit[i] = s
+    end
     o.fill = CreateFrame("StatusBar", nil, o)
     o.fill:SetAllPoints(bar)
     o.fill:SetStatusBarTexture("Interface\\Buttons\\WHITE8x8")
@@ -145,8 +158,10 @@ end
 local function Progress()
     local lo, hi = bar:GetMinMaxValues()
     local v = bar:GetValue()
-    o.fill:SetMinMaxValues(lo, hi)                   -- secret or not, a StatusBar takes them
-    o.fill:SetValue(v)
+    for _, s in ipairs({ o.fill, o.lit[1], o.lit[2] }) do   -- secret or not, a StatusBar takes them
+        s:SetMinMaxValues(lo, hi)
+        s:SetValue(v)
+    end
     if Secret(lo) or Secret(hi) or Secret(v) or not (hi and v) or hi <= (lo or 0) then return nil end
     return (v - (lo or 0)) / (hi - (lo or 0))
 end
@@ -178,6 +193,16 @@ end
 ---------------------------------------------------------------------------------------------- the cast
 local function Colour(c) o.fill:SetStatusBarColor(c[1], c[2], c[3]) end
 
+-- the border: faint at rest; the left edge lit while a cast is under way, the right when it completes, and the
+-- top and bottom lit along the fill (o.lit) unless it was interrupted
+local function Border(left, right, along)
+    o.edges[1]:SetAlpha(FAINT)
+    o.edges[2]:SetAlpha(FAINT)
+    o.edges[3]:SetAlpha(left and LIT or FAINT)
+    o.edges[4]:SetAlpha(right and LIT or FAINT)
+    for _, s in ipairs(o.lit) do s:SetAlpha(along and LIT or 0) end
+end
+
 local function Start()
     if not (o and On()) then return end
     cast.active, cast.wilted = true, false
@@ -186,6 +211,7 @@ local function Start()
     local season = Season()
     for _, x in ipairs(o.flowers) do Look(x, season, cast.kind); x.open = 0 end
     Colour(FILL)
+    Border(true, false, true)
 end
 
 local function Bloom()
@@ -204,6 +230,7 @@ end
 local function Done()                                -- the cast completed: one bloom at the end
     if not cast.active then return end
     cast.active = false
+    Border(true, true, true)
     Bloom()
 end
 
@@ -211,6 +238,7 @@ local function Wilt()                                -- interrupted or failed: t
     if not cast.active then return end
     cast.active, cast.wilted = false, true
     Colour(WILTED)
+    Border(false, false, false)
 end
 
 local function Stopped(self)
@@ -232,6 +260,7 @@ function ns.Castbar()
     o:SetScript("OnUpdate", on and Draw or nil)
     local r, g, b = Edge()
     for _, t in ipairs(o.edges) do t:SetColorTexture(r, g, b, 1) end
+    for _, s in ipairs(o.lit) do s:SetStatusBarColor(r, g, b) end
     if not on and bloom then bloom.go:Stop(); bloom:Hide() end
 end
 
@@ -245,6 +274,7 @@ if bar then
         hooksecurefunc(bar, "HandleCastStop", Stopped)
         hooksecurefunc(bar, "HandleInterruptOrSpellFailed", Failed)
         Colour(FILL)
+        Border(false, false, false)
         ns.Castbar()
         if bar.casting or bar.channeling then Start() end   -- a /reload mid-cast
     end)

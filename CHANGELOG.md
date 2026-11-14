@@ -13,7 +13,7 @@ All notable changes to Manabloom are recorded here. The format follows
   paladin dim to radiant seal, hunter flint point to drawn bow.
 - A cast bar that flowers: a 1 px border and a dark green fill, five of the season's flowers opening as the fill
   reaches them, and a full bloom at the end of a completed cast. White for heals, violet for damage; an interrupted
-  cast wilts. With Homeland loaded the border wears your race's homeland colour. `/manabloom castbar on|off`.
+  cast wilts. The border wears your race's homeland colour, faint at rest and lit beside the fill as it goes. `/manabloom castbar on|off`.
 
 ### Fixed
 

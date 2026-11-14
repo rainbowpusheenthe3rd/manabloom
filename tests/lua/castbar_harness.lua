@@ -1,7 +1,7 @@
 -- Manabloom's cast bar against a stubbed PlayerCastingBarFrame: Blizzard's pieces hidden, the fill fed the bar's
 -- values, flowers opening as the fill reaches them, white petals for a heal and violet for damage, a bloom at the
--- right end of a completed cast (the left of a channel), wilting on an interrupt, the season's flowers, Homeland's
--- race colour on the border, secret values, and /manabloom castbar off.
+-- right end of a completed cast (the left of a channel), wilting on an interrupt, the season's flowers, the border in the race's
+-- colour (with or without Homeland), faint at rest and lit along the fill, secret values, and /manabloom castbar off.
 local dir = ...
 local ok = 0
 local function check(c, msg) assert(c, msg); ok = ok + 1 end
@@ -100,10 +100,13 @@ check(hooks.HandleCastStart and hooks.FinishSpell and hooks.HandleCastStop and h
 check(bar.Border.alpha == 0 and bar.Background.alpha == 0 and bar.Spark.alpha == 0, "Blizzard's border, background and spark hidden")
 check(bar.Text.alpha == 1 and bar.TextBorder.alpha == 1, "the spell name and its box stay")
 check(o.parent == bar and o.shown and o.level == 15, "our frame rides on the bar, above it")
-check(near(o.edges[1].rgb[1], 0.82), "without Homeland, a pale border")
+check(near(o.edges[1].rgb[1], 240 / 255) and near(o.edges[1].rgb[3], 1), "the night elf's moonflower rim, no Homeland needed")
+local lit = { frames[3], frames[4] }
+check(near(o.edges[1].alpha, 0.22) and near(o.edges[3].alpha, 0.22) and lit[1].alpha == 0, "at rest the border is faint")
+check(near(lit[1].rgb[1], 240 / 255), "the lit edges wear the same colour")
 
 -- a heal: violet? no, white; flowers open as the fill passes them
-local fill = frames[3]
+local fill = frames[5]
 bar:HandleCastStart("cast", 8936)
 local f1, f5 = o.flowers[1], o.flowers[5]
 check(f1.petals.tex:find("petals_autumn$") and f1.centre.tex:find("centre_autumn$"), "autumn's saffron crocus")
@@ -112,6 +115,8 @@ check(near(fill.rgb[1], 0.12) and near(fill.rgb[2], 0.36), "the fill is dark gre
 bar.value = 0.5                                          -- a quarter: past the first flower (1/6), not the second
 o.scripts.OnUpdate(o, 1)
 check(fill.lo == 0 and fill.hi == 2 and fill.v == 0.5, "the fill takes the bar's own values")
+check(lit[1].v == 0.5 and lit[2].hi == 2 and near(lit[1].alpha, 0.95), "top and bottom edges lit as far as the fill")
+check(near(o.edges[3].alpha, 0.95) and near(o.edges[4].alpha, 0.22), "the left edge lit, the right still faint")
 check(f1.open == 1 and f1.petals.alpha == 1 and f1.bud.alpha == 0, "the first flower is open")
 check(o.flowers[2].open == 0 and o.flowers[2].bud.alpha == 1, "the second is still a bud")
 o.scripts.OnUpdate(o, 0.1)
@@ -119,10 +124,11 @@ check(near(f1.petals.w, 11 * 1.65), "an open flower is 1.65 bar heights across")
 bar.value = 2
 o.scripts.OnUpdate(o, 0.1)
 check(near(f5.open, 0.4), "the last flower opens over a quarter second")
-local bloom = frames[5]                                  -- events, our frame, the fill, the flowers, the bloom
+local bloom = frames[7]                -- events, our frame, the two lit edges, the fill, the flowers, the bloom
 bar:FinishSpell()
 check(bloom.go.plays == 1 and bloom.shown and bloom.at[3] == "RIGHT", "a completed cast blooms at the right end")
 check(near(bloom.x.petals.rgb[1], 0.96), "the bloom is the heal's white")
+check(near(o.edges[4].alpha, 0.95), "a completed cast lights the right edge too")
 bar:HandleCastStop()
 check(bloom.go.plays == 1, "the stop after a finish doesn't bloom twice")
 
@@ -134,6 +140,7 @@ bar:HandleInterruptOrSpellFailed(false, "UNIT_SPELLCAST_FAILED", "someone else's
 check(near(fill.rgb[1], 0.12), "a failed other spell (still casting) changes nothing")
 bar:HandleInterruptOrSpellFailed(false, "UNIT_SPELLCAST_INTERRUPTED", "mine")
 check(near(fill.rgb[1], 0.42) and near(fill.rgb[3], 0.28), "interrupted: the fill goes dry-leaf brown")
+check(lit[1].alpha == 0 and near(o.edges[3].alpha, 0.22), "and the border goes back to faint")
 o.scripts.OnUpdate(o, 1)
 check(f1.open == 0, "and the flowers close")
 bar:HandleCastStop()
@@ -157,15 +164,15 @@ bar:HandleCastStart("cast", s)
 check(near(f1.petals.rgb[1], 0.72) and ManabloomDB.castbarProbe.secret == 1, "a sealed spell at an enemy: damage, counted")
 bar.value = s
 o.scripts.OnUpdate(o, 1)
-check(fill.v == s and f1.open == 0, "a secret value: the fill takes it, flowers stay buds")
+check(fill.v == s and lit[1].v == s and f1.open == 0, "a secret value: the fill and lit edges take it, flowers stay buds")
 bar.value = 0; hostile = false
 bar:HandleCastStart("cast", 6948)
 check(near(f1.petals.rgb[1], 1) and near(f1.petals.rgb[3], 0.55), "a cast that's neither (hearthstone): pale gold")
 
--- Homeland: the border in the race's colour
+-- Homeland loaded changes nothing: the colour is the race's either way
 loaded.Homeland = true
 ns.Castbar()
-check(near(o.edges[1].rgb[1], 240 / 255) and near(o.edges[1].rgb[3], 1), "with Homeland, the night elf's moonflower rim")
+check(near(o.edges[1].rgb[1], 240 / 255) and near(o.edges[1].rgb[3], 1), "with Homeland, the same rim")
 
 -- off: Blizzard's bar as it was
 ManabloomDB.castbar = false
