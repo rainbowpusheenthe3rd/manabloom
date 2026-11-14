@@ -9,9 +9,17 @@ damage or healing the spell gives for its mana: your best spell of its kind is p
 spells are ranked against damage spells and heals against heals. Made for World of Warcraft: Forever.
 
 Each season has its own wreath and its own colours (below, best spell on the left). Or choose classic colours,
-red through violet and blue to moonlight white, all year round.
+red through violet and blue to moonlight white, all year round. Whichever you choose, the scale runs dark to
+light: your worst spell darkest, your best palest, so it reads the same in every season.
 
 ![The four seasons' wreaths, best spell to worst](docs/seasons.png)
+
+## The bramble: bud, flower, blackberry
+
+![A bramble bud, flower and blackberry](docs/bramble_ladder.png)
+
+While you're casting, a bramble grows at the top and bottom of every wreath. Each efficient cast climbs a step,
+from a green bud to a white flower to a black blackberry; each poor cast drops one.
 
 ## In game
 
@@ -19,10 +27,30 @@ A real fight: as you cast, the bramble grows on every wreath, and steps back on 
 
 ![Manabloom in a real fight](docs/ingame_fight.webp)
 
-Hovering a spell (or the minimap leaf): leaves drift down the edges of the screen, red round to white.
-Here in Darnassus at night.
+### The tooltip
+
+![Wrath's tooltip with Manabloom's line: 3.19 damage per mana (best: Wrath)](docs/tooltip.png)
+
+Hover a spell and its tooltip gains one line: what it does for each point of mana, and the best spell you have of
+the same kind (or "your best damage" when it is the one). The small leaf is tinted in that spell's colour.
+
+### The falling leaves
 
 ![Leaves falling down the edges of the screen in Darnassus at night](docs/ingame_leaves.gif)
+
+While your mouse rests on a wreathed spell, or on the minimap leaf, leaves drift down the edges of the screen.
+Only those: a spell with no damage or healing number, or one that costs no mana, has no wreath and no leaves.
+
+- **Out of your way.** One leaf a second, left edge then right, inside the outer tenth of the screen, so they never
+  cross the middle where you're playing.
+- **Slow.** Each takes seven seconds to fall, swaying and turning as it goes.
+- **They show the scale.** Their colours walk the wreaths' own scale from darkest to palest over twelve leaves,
+  then begin again, so a long hover shows you every colour a spell could be.
+- **Gone when you are.** Move the mouse away and no more fall; the ones in the air fade out.
+- The only other leaves are a handful flung from each wreath when the season turns or Innervate lands, more from
+  your better spells.
+
+Recorded in Darnassus at night.
 
 ## What it does
 

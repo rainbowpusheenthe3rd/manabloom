@@ -7,13 +7,30 @@ button{font:inherit;padding:8px 16px;margin:8px 0 14px;border-radius:6px;border:
 <button onclick="var r=document.createRange();r.selectNodeContents(document.getElementById('desc'));var s=getSelection();s.removeAllRanges();s.addRange(r);">Select the description</button>
 <div id="desc"><p><strong>A seasonal druid wreath round each action button, coloured by mana efficiency.</strong> The lighter the wreath, the more damage or healing the spell gives for its mana: your best spell of its kind is palest, your worst darkest. Damage spells are ranked against damage spells and heals against heals. Made for World of Warcraft: Forever.</p>
 <p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/ingame_leaves.gif" alt="Hover a spell and leaves drift down the edges of the screen (Darnassus at night)" width="800"></p>
-<p><strong>See more in game</strong> (a real fight, and the seasons):<a href="https://github.com/rainbowpusheenthe3rd/manabloom">github.com/rainbowpusheenthe3rd/manabloom</a></p>
+<p>Classic colours run red through violet and blue to moonlight white; seasonal colours give each season its own. Whichever you choose, the scale runs dark to light: your worst spell darkest, your best palest, so it reads the same in every season.</p>
+<p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/ingame_fight.gif" alt="Manabloom in a real fight: the bramble grows on every wreath as you cast"></p>
+<h2>The bramble: bud, flower, blackberry</h2>
+<p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/bramble_ladder.png" alt="A bramble bud, flower and blackberry"></p>
+<p>While you're casting, a bramble grows at the top and bottom of every wreath. Each efficient cast climbs a step, from a green bud to a white flower to a black blackberry; each poor cast drops one. A few seconds after you stop, it rests.</p>
+<h2>The tooltip</h2>
+<p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/tooltip.png" alt="Wrath's tooltip with Manabloom's line: 3.19 damage per mana (best: Wrath)"></p>
+<p>Hover a spell and its tooltip gains one line: what it does for each point of mana, and the best spell you have of the same kind (or "your best damage" when it is the one). The small leaf is tinted in that spell's colour.</p>
+<h2>The falling leaves</h2>
+<p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/ingame_leaves.gif" alt="Hover a spell and leaves drift down the edges of the screen (Darnassus at night)" width="800"></p>
+<p>While your mouse rests on a wreathed spell, or on the minimap leaf, leaves drift down the edges of the screen. Only those: a spell with no damage or healing number, or one that costs no mana, has no wreath and no leaves.</p>
+<ul>
+<li><strong>Out of your way.</strong> One leaf a second, left edge then right, inside the outer tenth of the screen, so they never cross the middle where you're playing.</li>
+<li><strong>Slow.</strong> Each takes seven seconds to fall, swaying and turning as it goes.</li>
+<li><strong>They show the scale.</strong> Their colours walk the wreaths' own scale from darkest to palest over twelve leaves, then begin again, so a long hover shows you every colour a spell could be.</li>
+<li><strong>Gone when you are.</strong> Move the mouse away and no more fall; the ones in the air fade out.</li>
+</ul>
+<p>The only other leaves are a handful flung from each wreath when the season turns or Innervate lands, more from your better spells.</p>
+<p><strong>Source and more:</strong><a href="https://github.com/rainbowpusheenthe3rd/manabloom">github.com/rainbowpusheenthe3rd/manabloom</a></p>
 <h2>What it does</h2>
 <ul>
 <li><strong>Each season has its own wreath and colours.</strong> Spring is a vine with blossom, summer oxeye daisies, autumn oak leaves and acorns, winter frost, following the calendar. Or choose classic colours, red through violet and blue to moonlight white, all year round.</li>
-<li><strong>A bramble that grows with how well you cast.</strong> While you're casting, a small bramble sits at the top and bottom of every wreath: a green bud, a white flower, a black blackberry. Each efficient cast (the better half of your spells of that kind) climbs a step: bud, two buds, flower and bud, two flowers, berry and flower, two berries. Each poor cast drops a step. A few seconds after you stop, it rests.</li>
+<li><strong>Efficient means the better half.</strong> A cast climbs the bramble when the spell is in the better half of your spells of its kind. The six steps: bud, two buds, flower and bud, two flowers, berry and flower, two berries.</li>
 <li><strong>True to the species.</strong> The flower and berry are bramble, <em>Rubus fruticosus</em>, drawn from its flower genes in a true-to-life flower-geometry system: five broad, rounded petals around a ring of many stamens; the fruit an aggregate of glossy drupelets with the sepals folded back behind it.</li>
-<li><strong>Hover a spell</strong> for its damage or healing per mana and your best spell of its kind, while a few leaves drift down the edges of the screen.</li>
 <li><strong>Quietly alive:</strong> Innervate turns every wreath to spring blossom while it lasts; Moonkin makes them starlit; in cat and bear form, where nothing costs mana, they step aside; the first time you log in in a new season, the old wreaths shed and the new ones grow in; learn a new rank and it tells you whether it's better per mana, with a small sprout on the old rank's button until you put the new one on your bar.</li>
 </ul>
 <h2>The minimap button</h2>
