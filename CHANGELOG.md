@@ -4,6 +4,15 @@ All notable changes to Manabloom are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- The cast bar grows your class's own ladder in place of the season's flowers: the first stage waits ahead of the
+  fill, the second opens as it passes, the third blooms at the end (a priest's candle, flame and halo). Druids keep
+  the season's flowers. The heal and damage colours and your race's border stay; the class art keeps its own
+  colours, leaning violet for damage.
+
 ## [1.1.0] - 2026-11-15
 
 ### Added

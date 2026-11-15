@@ -18,7 +18,8 @@ spells are ranked against damage spells and heals against heals. Made for World 
 - **The falling leaves are decoration.** They drift down the edges of the screen only while you hover a wreathed
   spell, a reminder of the colour scale and nothing more.
 - **The cast bar flowers (new in 1.1).** The season's flowers open along it as you cast, white for a heal and
-  violet for damage, and a cast that lands ends in a full bloom.
+  violet for damage, and a cast that lands ends in a full bloom. Other classes grow their own ladder along it
+  instead: a priest's candles light and end in a halo.
 
 ![The flowering cast bar in game: violet for Wrath, white for Regrowth, a bloom when a cast lands, wilting when one is broken](docs/ingame_castbar.webp)
 
@@ -116,6 +117,11 @@ Recorded in Darnassus at night.
   snowdrop in winter). Each is a bud until the fill reaches it, then opens. A cast that completes ends in one full
   bloom; an interrupted one wilts brown and its flowers close. Heals flower white, damage violet. The
   border is your race's homeland colour, faint at rest, lighting up beside the fill as it slides along.
+  Druids keep the season's flowers; every other mana class grows its own ladder along the bar, the same three
+  stages as on its wreaths: the first waits ahead of the fill, the second opens as the fill passes, and the third
+  is the bloom (priest candle, flame, halo; mage spark, glyph, crystal; warlock ember, fel flame, soul shard;
+  shaman pebble, wave, storm; paladin dim, glowing, radiant seal; hunter flint point, arrow, drawn bow). Their art
+  keeps its own colours, leaning violet for damage.
 
   ![Each season's cast bar flower for heal, damage and neither, a completed cast, and each race's border colour](docs/castbar_reference.png)
 
