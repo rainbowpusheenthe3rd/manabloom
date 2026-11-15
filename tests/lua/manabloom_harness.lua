@@ -74,6 +74,7 @@ for i = 1, 12 do
     local b = { action = i, made = 0 }
     function b:GetWidth() return 40 end
     function b:GetCenter() return 100 * i, 50 end
+    function b:GetBottom() return self.bottom or 30 end
     function b:CreateTexture()
         local t = stub({ shown = false })
         function t:SetPoint(_, _, _, x, y) self.x, self.y = x, y end
@@ -327,6 +328,14 @@ for _ = 1, 3 do cast(8921) end
 check(shows(1) == "priest_2/priest_1", "a priest's third step: flame north, candle south")
 for _ = 1, 3 do cast(8921) end
 check(shows(1) == "priest_3/priest_3", "and the top: two haloes")
+-- the south motif on a bar flush with the bottom of the screen lifts until it shows whole; elsewhere it stays put
+local m = 40 * 0.36
+check(near(souths[1].y, -0.15 * m), "a button well above the screen's edge: the south motif in its usual place")
+ActionButton1.bottom = 0
+cast(8921)
+check(souths[1].y - m / 2 >= 0 and souths[1].y - m / 2 < 1.5, "a button at the screen's edge: its south motif lifts just clear")
+check(near(norths[1].y, 0.15 * m), "the north motif doesn't move")
+ActionButton1.bottom = nil
 now = now + 9; run()
 UnitClass = nil
 return ok
