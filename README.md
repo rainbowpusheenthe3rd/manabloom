@@ -19,12 +19,18 @@ spells are ranked against damage spells and heals against heals. Made for World 
   spell, a reminder of the colour scale and nothing more.
 - **The cast bar flowers (new in 1.1).** The season's flowers open along it as you cast, white for a heal and
   violet for damage, and a cast that lands ends in a full bloom. Other classes grow their own ladder along it
-  instead: a priest's candles light and end in a halo.
+  instead (new in 1.2): a priest's candles light and end in a halo.
 
 ![The flowering cast bar in game: violet for Wrath, white for Regrowth, a bloom when a cast lands, wilting when one is broken](docs/ingame_castbar.webp)
 
 *The cast bar in game: each flower is a bud until the fill reaches it, then opens; a finished cast blooms at the
 end; a broken one wilts brown. The thin border lights up beside the fill, in your race's homeland colour.*
+
+![The priest's cast bar in game: candles light as the fill passes, a finished Smite ends in a candle in a halo, a heal keeps the candles' own colours, a broken cast wilts](docs/ingame_castbar_priest.webp)
+
+*New in 1.2: every other mana class grows its own ladder along the bar. A priest's candles wait unlit ahead of the
+fill and light as it passes, and a finished cast ends in a candle in a silver halo. Druids keep the season's
+flowers.*
 
 ![Manabloom in a real fight](docs/ingame_fight.webp)
 

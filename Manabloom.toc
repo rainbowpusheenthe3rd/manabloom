@@ -1,7 +1,7 @@
 ## Interface: 16001, 120105
 ## IconTexture: Interface\AddOns\Manabloom\icon
 ## Title: Manabloom
-## Version: 1.1.0
+## Version: 1.2.0
 ## Notes: A seasonal wreath round each action button, red to moonlight white by damage or healing per mana, with your class's own ladder that grows as you cast efficiently, and a cast bar that flowers. /manabloom
 ## SavedVariablesPerCharacter: ManabloomDB
 
