@@ -260,13 +260,7 @@ function ns.Style()
                     t:SetVertexColor(1, 1, 1)  -- their own colours, not the efficiency tint
                     t:SetAlpha(O)
                     t:ClearAllPoints()
-                    -- 15 Nov 2026: on a bar flush with the bottom of the screen the south motif, whose lowest
-                    -- point sits 0.65 of its size under the button, was drawn off-screen. It lifts by just enough
-                    -- to show whole (GetBottom is in the button's own units, the screen's edge at 0).
-                    local y = (i == 1 and 1 or -1) * m * 0.15
-                    local bottom = i == 2 and b.GetBottom and b:GetBottom()
-                    if bottom and not Secret(bottom) and bottom < m * 0.65 + 1 then y = y + m * 0.65 + 1 - bottom end
-                    t:SetPoint("CENTER", b, i == 1 and "TOP" or "BOTTOM", 0, y)
+                    t:SetPoint("CENTER", b, i == 1 and "TOP" or "BOTTOM", 0, (i == 1 and 1 or -1) * m * 0.15)
                     t:Show()
                 else
                     t:Hide()
