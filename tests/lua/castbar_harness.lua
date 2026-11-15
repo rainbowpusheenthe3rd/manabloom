@@ -174,6 +174,23 @@ bar:HandleCastStart("cast", 8938)
 check(near(f1.petals.rgb[1], 0.96) and near(f1.petals.rgb[3], 1), "Regrowth by another ID: matched by name, white")
 C_Spell = nil
 
+-- a priest: the class's own ladder in place of the season's flowers, the tint mixed half with white
+ns.ClassMotifs = function() return { "priest_1", "priest_2", "priest_3" } end
+hostile = true
+bar:HandleCastStart("cast", 5176)
+check(f1.petals.tex:find("motif_priest_2$") and rawget(f1.centre, "tex") == nil, "a priest's flame along the bar, no flower centre")
+check(f1.bud.tex:find("motif_priest_1$"), "and candles waiting ahead of the fill")
+check(near(f1.petals.rgb[1], 0.86) and near(f1.petals.rgb[2], 0.75) and near(f1.petals.rgb[3], 0.99),
+    "damage tints it violet, mixed half with white")
+bar:FinishSpell()
+check(bloom.x.petals.tex:find("motif_priest_3$"), "a finished cast ends in a halo")
+ns.ClassMotifs = function() return nil end   -- a druid: the season's flowers again
+bar:HandleCastStart("cast", 8936)
+check(f1.petals.tex:find("petals_autumn$") and f1.bud.tex:find("cast_bud$") and near(f1.petals.rgb[1], 0.96),
+    "a druid keeps the season's flowers, the heal's white at full strength")
+bar:FinishSpell()
+ns.ClassMotifs = nil; hostile = false
+
 -- Homeland loaded changes nothing: the colour is the race's either way
 loaded.Homeland = true
 ns.Castbar()
@@ -185,5 +202,5 @@ ns.Castbar()
 check(not o.shown and bar.Border.alpha == 1 and bar.Spark.alpha == 1 and o.scripts.OnUpdate == nil, "off: Blizzard's own bar back")
 bar:HandleCastStart("cast", 8936)
 bar:FinishSpell()
-check(bloom.go.plays == 2, "and no blooms while off")
+check(bloom.go.plays == 4, "and no blooms while off")  -- two more from the priest and druid casts above
 return ok

@@ -101,11 +101,38 @@ local function Flower(f, layer)
     return x
 end
 
-local function Look(x, season, kind)
+-- 15 Nov 2026: every class but the druid grows its own ladder along the bar instead of the season's flowers (the
+-- same art as the wreaths' ladder, ns.ClassMotifs): stage 1 waits ahead of the fill, stage 2 opens as the fill
+-- passes, stage 3 is the bloom at the end. The art is full colour, so the heal/damage tint is mixed half with white
+-- first: a full tint turned the warlock's fel flame grey and the paladin's gold seal rose (tools preview, by eye).
+local MOTIF_TINT = 0.5
+
+local function Tint(kind, mix)
     local t = TINT[kind] or TINT.other
+    return 1 - mix + mix * t[1], 1 - mix + mix * t[2], 1 - mix + mix * t[3]
+end
+
+-- x: a flower (petals and centre); stage: 2 along the bar, 3 for the bloom
+local function Look(x, season, kind, stage)
+    local m = ns.ClassMotifs and ns.ClassMotifs()
+    x.motif = m and true or nil
+    if m then
+        x.petals:SetTexture(DIR .. "motif_" .. m[stage or 2])
+        x.petals:SetVertexColor(Tint(kind, MOTIF_TINT))
+        x.centre:SetTexture(nil)
+        if x.bud then
+            x.bud:SetTexture(DIR .. "motif_" .. m[1])
+            x.bud:SetVertexColor(Tint(kind, MOTIF_TINT))
+        end
+        return
+    end
     x.petals:SetTexture(DIR .. "petals_" .. season)
-    x.petals:SetVertexColor(t[1], t[2], t[3])
+    x.petals:SetVertexColor(Tint(kind, 1))
     x.centre:SetTexture(DIR .. "centre_" .. season)
+    if x.bud then
+        x.bud:SetTexture(DIR .. "cast_bud")
+        x.bud:SetVertexColor(1, 1, 1)
+    end
 end
 
 local function Build()
@@ -193,7 +220,7 @@ local function Draw(_, dt)
         x.petals:SetPoint("CENTER", bar, "LEFT", w * x.at, 0)
         x.petals:SetSize(size, size)
         x.centre:SetSize(size, size)
-        if x.petals.SetRotation then x.petals:SetRotation(-0.6 * (1 - x.open)) end
+        if x.petals.SetRotation then x.petals:SetRotation(x.motif and 0 or -0.6 * (1 - x.open)) end  -- a flower twists open; a motif doesn't
         x.petals:SetAlpha(x.open)
         x.centre:SetAlpha(x.open)
         x.bud:ClearAllPoints()
@@ -234,7 +261,7 @@ local function Bloom()
     bloom.x.centre:SetSize(size, size)
     bloom:ClearAllPoints()
     bloom:SetPoint("CENTER", bar, cast.channel and "LEFT" or "RIGHT", 0, 0)
-    Look(bloom.x, Season(), cast.kind)
+    Look(bloom.x, Season(), cast.kind, 3)
     bloom.go:Stop()
     bloom:Show()
     bloom.go:Play()

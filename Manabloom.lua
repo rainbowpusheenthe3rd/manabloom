@@ -63,7 +63,13 @@ function ns.Motifs()
     local class = UnitClass and select(2, UnitClass("player"))
     return MOTIFS[class or ""] or MOTIFS.DRUID
 end
-local MOTIF = 0.36                                      -- a motif's size, in button widths
+-- a class's own ladder, for the cast bar; nil for a druid (the season's flowers are the druid's) and for a class
+-- without one
+function ns.ClassMotifs()
+    local class = UnitClass and select(2, UnitClass("player"))
+    if class ~= "DRUID" then return MOTIFS[class or ""] end
+end
+local MOTIF = 0.36                                     -- a motif's size, in button widths
 -- 9 Nov 2026: the top quarter (0.75) sent a normal Wrath-and-Moonfire fight to seed every time (Wrath Rank 2
 -- sits at 0.69 under Rank 1); the better half ripens on good choices and still falls on poor ones.
 local IDEAL, REST_AFTER = 0.5, 8                       -- better half climbs; seconds without a cast before it rests
