@@ -4,6 +4,13 @@ All notable changes to Manabloom are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- On an action bar flush with the bottom of the screen, the ladder's lower motif was drawn off the edge. It now
+  lifts just far enough to show whole; bars higher up are unchanged.
+
 ## [1.1.0] - 2026-11-15
 
 ### Added
