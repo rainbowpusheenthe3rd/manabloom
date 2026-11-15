@@ -4,7 +4,13 @@
 
 The bramble ladder (bud → flower → berry, two motifs per wreath, six steps) in every season.
 
-## 1.1: a ladder of its own for each season (the author, 9 Nov 2026)
+## 1.1: a ladder of its own for each class (12 Nov 2026)
+
+The flat class ladders chosen on 10 Nov 2026 (tools/manabloom_pivot_draft.py), exported by
+tools/manabloom_class_motifs.py. Still to check in game: each class at bar size, especially the hunter's
+arrow against its drawn bow and the shaman's dark storm cloud, the weakest steps on the bar-size check sheet.
+
+## Later: a ladder of its own for each season (the author, 9 Nov 2026)
 
 Each season gets something unique and **just as readable** as the bramble ladder: natural colours, distinct in
 hue, lightness and shape at bar size (about 23 px a motif), two slots north then south, six steps. Following the

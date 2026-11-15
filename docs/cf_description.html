@@ -5,20 +5,28 @@ button{font:inherit;padding:8px 16px;margin:8px 0 14px;border-radius:6px;border:
 .note{color:#555;font-size:14px}</style></head><body>
 <p class="note">1. Click the button, 2. Ctrl+C, 3. in CurseForge's Description editor: Ctrl+A, Ctrl+V, then Save.</p>
 <button onclick="var r=document.createRange();r.selectNodeContents(document.getElementById('desc'));var s=getSelection();s.removeAllRanges();s.addRange(r);">Select the description</button>
-<div id="desc"><p><strong>A seasonal druid wreath round each action button, coloured by mana efficiency.</strong> The lighter the wreath, the more damage or healing the spell gives for its mana: your best spell of its kind is palest, your worst darkest. Damage spells are ranked against damage spells and heals against heals. Made for World of Warcraft: Forever.</p>
+<div id="desc"><p><strong>A seasonal wreath round each action button, coloured by mana efficiency, for every class that casts with mana; and now a cast bar that flowers.</strong> The lighter the wreath, the more damage or healing the spell gives for its mana: your best spell of its kind is palest, your worst darkest. Damage spells are ranked against damage spells and heals against heals. Made for World of Warcraft: Forever.</p>
 <p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/ingame_leaves.gif" alt="Hover a spell and leaves drift down the edges of the screen (Darnassus at night)" width="800"></p>
 <h2>What you're looking at</h2>
 <ul>
 <li><strong>The wreath is the information.</strong> Every spell that costs mana and does damage or healing gets a thin wreath round its action button. Its colour says how much the spell gives for its mana, against your other spells of the same kind: palest is your best, darkest your worst.</li>
 <li><strong>The bramble grows on the wreath</strong> while you fight: bud, flower, blackberry as you cast well.</li>
 <li><strong>The falling leaves are decoration.</strong> They drift down the edges of the screen only while you hover a wreathed spell, a reminder of the colour scale and nothing more.</li>
+<li><strong>The cast bar flowers (new in 1.1).</strong> The season's flowers open along it as you cast, white for a heal and violet for damage, and a cast that lands ends in a full bloom.</li>
 </ul>
 <p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/ingame_fight.gif" alt="Manabloom in a real fight: the bramble grows on every wreath as you cast"><br>
 <em>A real fight: each wreath's colour is that spell's efficiency, and as you cast well the bramble grows on every wreath, bud to flower to blackberry.</em></p>
 <p>Classic colours run red through violet and blue to moonlight white; seasonal colours give each season its own. Whichever you choose, the scale runs dark to light: your worst spell darkest, your best palest, so it reads the same in every season.</p>
+<h2>The flowering cast bar (new in 1.1)</h2>
+<p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/ingame_castbar.gif" alt="The flowering cast bar in game: violet for Wrath, white for Regrowth, a bloom when a cast lands, wilting when one is broken"></p>
+<p>Your cast bar becomes a stem: a thin border and a dark green fill, with five of the season's flowers along it: hawthorn blossom in spring, oxeye daisy in summer, saffron crocus in autumn, snowdrop in winter. Each is a bud until the fill reaches it, then opens. A cast that completes ends in one full bloom; a broken one wilts brown and its flowers close. Heals flower white, damage violet. The border is your race's homeland colour, faint at rest, lighting up beside the fill as it slides along. Ctrl-click the minimap leaf, or <code>/manabloom castbar off</code>, for Blizzard's own bar.</p>
+<p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/castbar_reference.png" alt="Each season's cast bar flower for heal, damage and neither, a completed cast, and each race's border colour" width="800"></p>
 <h2>The bramble: bud, flower, blackberry</h2>
 <p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/bramble_ladder.png" alt="A bramble bud, flower and blackberry"></p>
 <p>While you're casting, a bramble grows at the top and bottom of every wreath. Each efficient cast climbs a step, from a green bud to a white flower to a black blackberry; each poor cast drops one. A few seconds after you stop, it rests.</p>
+<h2>Every mana class grows its own (new in 1.1)</h2>
+<p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/class_ladders.png" alt="Each class's ladder: druid bramble, priest candle, mage crystal, warlock shard, shaman storm, paladin seal, hunter arrow"></p>
+<p>The druid's is the bramble. Every other mana class climbs its own three stages the same way, two at a time: priest unlit candle, lit candle, candle in a halo; mage spark, glyph, crystal; warlock ember, fel flame, soul shard; shaman pebble, wave, storm; paladin dim, glowing and radiant seal; hunter flint point, fletched arrow, arrow on a drawn bow.</p>
 <h2>The tooltip</h2>
 <p><img src="https://raw.githubusercontent.com/rainbowpusheenthe3rd/manabloom/main/docs/tooltip.png" alt="Wrath's tooltip with Manabloom's line: 3.19 damage per mana (best: Wrath)"></p>
 <p>Hover a spell and its tooltip gains one line: what it does for each point of mana, and the best spell you have of the same kind (or "your best damage" when it is the one). The small leaf is tinted in that spell's colour.</p>

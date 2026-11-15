@@ -2,7 +2,8 @@
 -- The oak leaf on it wears your best spell's colour (this season's, if the colours follow the season).
 -- Hover: your spells by mana efficiency, and a few leaves fall. Left-click: the next season (then back to the
 -- calendar's). Right-click: classic colours or the season's. Shift-click: wreaths on or off (a stray plain click
--- once hid them all, 9 Nov 2026, so hiding takes a shift). Drag: move it round the edge (kept per character).
+-- once hid them all, 9 Nov 2026, so hiding takes a shift). Ctrl-click: the flowering cast bar on or off.
+-- Drag: move it round the edge (kept per character).
 local CYCLE = { autumn = "winter", winter = "spring", spring = "summer", summer = "auto" }
 local _, ns = ...
 local DIR = "Interface\\AddOns\\Manabloom\\"
@@ -43,6 +44,7 @@ b:SetScript("OnEnter", function(self)
     if db.off then GameTooltip:AddLine("Wreaths put away: shift-click to bring them back", 1, 0.5, 0.3) end
     GameTooltip:AddLine(("%s%s, %s colours"):format(ns.Season(), db.season and "" or " (the calendar's)",
         db.colours and "seasonal" or "classic"), 0.7, 0.7, 0.7)
+    GameTooltip:AddLine(db.castbar == false and "Cast bar: Blizzard's" or "Cast bar: flowering", 0.7, 0.7, 0.7)
     for _, e in ipairs(ns.Ranked()) do
         GameTooltip:AddDoubleLine(ns.Leaf(e.t) .. " " .. e.name, ("%.2f %s"):format(e.per, e.kind == "heal" and "heal" or "dmg"),
             1, 1, 1, ns.Colour(e.t))
@@ -50,6 +52,7 @@ b:SetScript("OnEnter", function(self)
     GameTooltip:AddLine("Left-click: next season", 1, 1, 1)
     GameTooltip:AddLine("Right-click: classic or seasonal colours", 1, 1, 1)
     GameTooltip:AddLine("Shift-click: wreaths on or off", 1, 1, 1)
+    GameTooltip:AddLine("Ctrl-click: flowering cast bar on or off", 1, 1, 1)
     GameTooltip:AddLine("Drag: move this button", 0.7, 0.7, 0.7)
     GameTooltip:Show()
     ns.Leaves(self)
@@ -57,7 +60,9 @@ end)
 b:SetScript("OnLeave", function(self) self:SetAlpha(REST) GameTooltip:Hide() end)
 b:SetScript("OnClick", function(self, button)
     local db = ManabloomDB or {}
-    if IsShiftKeyDown and IsShiftKeyDown() then
+    if IsControlKeyDown and IsControlKeyDown() then
+        SlashCmdList.MANABLOOM(db.castbar == false and "castbar on" or "castbar off")
+    elseif IsShiftKeyDown and IsShiftKeyDown() then
         SlashCmdList.MANABLOOM(db.off and "on" or "off")
     elseif button == "RightButton" then
         SlashCmdList.MANABLOOM(db.colours and "colours classic" or "colours season")
