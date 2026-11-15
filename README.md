@@ -17,6 +17,13 @@ spells are ranked against damage spells and heals against heals. Made for World 
 - **The bramble grows on the wreath** while you fight: bud, flower, blackberry as you cast well.
 - **The falling leaves are decoration.** They drift down the edges of the screen only while you hover a wreathed
   spell, a reminder of the colour scale and nothing more.
+- **The cast bar flowers (new in 1.1).** The season's flowers open along it as you cast, white for a heal and
+  violet for damage, and a cast that lands ends in a full bloom.
+
+![The flowering cast bar in game: violet for Wrath, white for Regrowth, a bloom when a cast lands, wilting when one is broken](docs/ingame_castbar.webp)
+
+*The cast bar in game: each flower is a bud until the fill reaches it, then opens; a finished cast blooms at the
+end; a broken one wilts brown. The thin border lights up beside the fill, in your race's homeland colour.*
 
 ![Manabloom in a real fight](docs/ingame_fight.webp)
 
@@ -109,6 +116,8 @@ Recorded in Darnassus at night.
   snowdrop in winter). Each is a bud until the fill reaches it, then opens. A cast that completes ends in one full
   bloom; an interrupted one wilts brown and its flowers close. Heals flower white, damage violet. The
   border is your race's homeland colour, faint at rest, lighting up beside the fill as it slides along.
+
+  ![Each season's cast bar flower for heal, damage and neither, a completed cast, and each race's border colour](docs/castbar_reference.png)
 
 ![The minimap button](docs/minimap.png)
 
