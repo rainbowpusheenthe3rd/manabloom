@@ -2,7 +2,7 @@ r"""Cut the cast bar clip for the front page and CurseForge from a screen record
 on the cast bar (no names: the crop holds only the bar, its spell name and the bloom), doubled in size, each with
 a caption, as an animated WebP (smooth, small), an MP4, and a GIF at a third of the frame rate (8 fps, 48 colours, to stay small) for CurseForge.
 
-  uv run --no-project --with pillow --with imageio-ffmpeg python tools/manabloom_castbar_clip.py REC.mp4 OUT_STEM
+  uv run --no-project --with pillow --with imageio-ffmpeg python tools/manabloom_castbar_clip.py REC.mp4 OUT_STEM ["start,end,caption" ...]
 
 Segments and the crop are below (from castbar_2026-11-15_b.mp4, recorded at 1920 x 1080 in Darkshore).
 """
@@ -68,4 +68,7 @@ def main(video, stem):
 
 
 if __name__ == "__main__":
+    # optional segments after the two paths, each "start,end,caption" (seconds), in place of SEGMENTS
+    if len(sys.argv) > 3:
+        SEGMENTS = [(float(a), float(b), c) for a, b, c in (s.split(",", 2) for s in sys.argv[3:])]
     main(sys.argv[1], sys.argv[2])
