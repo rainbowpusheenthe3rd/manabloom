@@ -8,10 +8,15 @@ All notable changes to Manabloom are recorded here. The format follows
 
 ### Added
 
-- The cast bar grows your class's own ladder in place of the season's flowers: the first stage waits ahead of the
-  fill, the second opens as it passes, the third blooms at the end (a priest's candle, flame and halo). Druids keep
-  the season's flowers. The heal and damage colours and your race's border stay; the class art keeps its own
-  colours, leaning violet for damage.
+- The cast bar grows your class's own ladder, for every class that casts with mana. The first stage waits ahead of the fill, the second opens as the fill passes, and the third blooms at the end of a finished cast.
+  - Priest: candle, flame, halo.
+  - Mage: spark, glyph, crystal.
+  - Warlock: ember, fel flame, soul shard.
+  - Shaman: pebble, wave, storm.
+  - Paladin: dim, glowing and radiant seal.
+  - Hunter: flint point, fletched arrow, drawn bow.
+  - Druid: the season's flowers, as before.
+- The heal and damage colours and your race's border are unchanged. The class art keeps its own colours, leaning violet for damage.
 
 ## [1.1.0] - 2026-11-15
 
