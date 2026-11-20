@@ -4,6 +4,12 @@ All notable changes to Manabloom are recorded here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow
 [Semantic Versioning](https://semver.org/).
 
+## [1.2.1] - 2026-11-20
+
+### Fixed
+
+- The cast bar no longer shows the first damage cast or two in gold, the colour for other spells. Each spell's kind is now remembered by name, so it stays right even when the game briefly drops the spell from its rank list.
+
 ## [1.2.0] - 2026-11-15
 
 ### Added
