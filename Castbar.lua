@@ -65,6 +65,27 @@ end
 -- its name (14 Nov 2026, in game: Regrowth and Entangling Roots came out gold, as neither, while Wrath was right;
 -- the cast's ID wasn't the one ranked on the bars, a macro or another rank); a spell it can't read (secret in
 -- combat) is judged by the target: at an enemy, damage; otherwise a heal
+-- 17 Nov 2026, in game: the first damage cast or two of a fight came out gold ("other") instead of violet.
+-- Hypothesis, not confirmed: the spell had dropped out of ns.rank (Luke's saved data counts 131 rankDrops), and in
+-- combat the ranking isn't rebuilt. So each spell's kind is remembered by name the moment it is ranked
+-- (ManabloomDB.kinds), and a drop no longer loses it. Every "other" is logged (ManabloomDB.otherLog, last 20) with
+-- whether the spell was ranked, the live cast's ID and combat, to tell the hypotheses apart next time.
+local function Remember()
+    local kinds = ManabloomDB.kinds or {}
+    ManabloomDB.kinds = kinds
+    for rid, rr in pairs(ns.rank or {}) do
+        local n = NameOf(rid)
+        if n and not Secret(n) then kinds[n] = rr.kind end
+    end
+    return kinds
+end
+
+local function LiveID()
+    local id = UnitCastingInfo and select(9, UnitCastingInfo("player"))
+    if id == nil and UnitChannelInfo then id = select(8, UnitChannelInfo("player")) end
+    return id
+end
+
 local function Kind(id)
     if Secret(id) then
         local probe = ManabloomDB.castbarProbe or { secret = 0 }
@@ -72,13 +93,21 @@ local function Kind(id)
         probe.secret = probe.secret + 1
         return (UnitCanAttack and UnitCanAttack("player", "target")) and "damage" or "heal"
     end
+    local kinds = Remember()
     local r = ns.rank and ns.rank[id or 0]
     if r then return r.kind end
     local name = id and NameOf(id)
-    if name then
-        for rid, rr in pairs(ns.rank or {}) do
-            if NameOf(rid) == name then return rr.kind end
-        end
+    if name and kinds[name] then return kinds[name] end
+    local live = LiveID()
+    local log = ManabloomDB.otherLog or {}
+    ManabloomDB.otherLog = log
+    if #log >= 20 then table.remove(log, 1) end
+    log[#log + 1] = { when = date("%Y-%m-%d %H:%M:%S"), id = id, name = name,
+        live = not Secret(live) and live or "secret", ranked = next(ns.rank or {}) ~= nil,
+        combat = InCombatLockdown and InCombatLockdown() or false }
+    if live and not Secret(live) and live ~= id then
+        local n = NameOf(live)
+        if n and kinds[n] then return kinds[n] end
     end
     return "other"
 end

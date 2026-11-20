@@ -172,6 +172,17 @@ check(near(f1.petals.rgb[1], 1) and near(f1.petals.rgb[3], 0.55), "a cast that's
 C_Spell = { GetSpellName = function(id) return ({ [8936] = "Regrowth", [8938] = "Regrowth", [6948] = "Hearthstone" })[id] end }
 bar:HandleCastStart("cast", 8938)
 check(near(f1.petals.rgb[1], 0.96) and near(f1.petals.rgb[3], 1), "Regrowth by another ID: matched by name, white")
+check(#ManabloomDB.otherLog == 1 and ManabloomDB.otherLog[1].id == 6948, "the hearthstone's gold is logged, with its ID")
+-- 17 Nov 2026: Wrath drops out of the ranking (a rankDrop) and the bar must not go gold: its kind was remembered
+C_Spell.GetSpellName = function(id) return ({ [8936] = "Regrowth", [8938] = "Regrowth", [6948] = "Hearthstone",
+    [5176] = "Wrath", [5177] = "Wrath" })[id] end
+hostile = true
+bar:HandleCastStart("cast", 5176)
+local wrath = ns.rank[5176]; ns.rank[5176] = nil
+bar:HandleCastStart("cast", 5177)
+check(near(f1.petals.rgb[1], 0.72) and near(f1.petals.rgb[3], 0.98) and #ManabloomDB.otherLog == 1,
+    "Wrath gone from the ranking: still violet, remembered by name, nothing logged")
+ns.rank[5176] = wrath; hostile = false
 C_Spell = nil
 
 -- a priest: the class's own ladder in place of the season's flowers, the tint mixed half with white
