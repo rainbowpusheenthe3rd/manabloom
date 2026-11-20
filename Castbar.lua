@@ -66,7 +66,7 @@ end
 -- the cast's ID wasn't the one ranked on the bars, a macro or another rank); a spell it can't read (secret in
 -- combat) is judged by the target: at an enemy, damage; otherwise a heal
 -- 17 Nov 2026, in game: the first damage cast or two of a fight came out gold ("other") instead of violet.
--- Hypothesis, not confirmed: the spell had dropped out of ns.rank (Luke's saved data counts 131 rankDrops), and in
+-- Hypothesis, not confirmed: the spell had dropped out of ns.rank (the saved data counts 131 rankDrops), and in
 -- combat the ranking isn't rebuilt. So each spell's kind is remembered by name the moment it is ranked
 -- (ManabloomDB.kinds), and a drop no longer loses it. Every "other" is logged (ManabloomDB.otherLog, last 20) with
 -- whether the spell was ranked, the live cast's ID and combat, to tell the hypotheses apart next time.
